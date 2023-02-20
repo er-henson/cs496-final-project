@@ -1,38 +1,58 @@
-.App {
+/* Global styles */
+body {
+  font-family: sans-serif;
+}
+
+a.fancy_link {
+  text-decoration: none;
+  color: #FFFFFF;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+a.fancy_link:hover {
+  color: #B59EC1;
+}
+
+.page_li {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  list-style: none;
+}
+
+/* Styles for the footer */
+footer {
+  background: #000000;
+  color: #FFFFFF;
   text-align: center;
+  padding: 1rem;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Styles for the jumbotron */
+.jumbotron h1 {
+  font-size: 3rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Styles for the navbar */
+.navbar {
+  margin-bottom: 2rem;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.navbar-nav .nav-item {
+  margin-right: 1rem;
 }
 
-.App-link {
-  color: #61dafb;
+/* Styles for the headers */
+header {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+header h1 {
+  font-size: 2.5rem;
+}
+
+/* Styles for the left and right columns */
+.col-lg-6 {
+  margin-bottom: 2rem;
 }
