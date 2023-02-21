@@ -1,10 +1,10 @@
 import React from 'react';
-
+import './Mainpage.css'
 function MeetingsSection() {
     return (
-      <div className="col-12 col-lg-6" style={{display:'inline-block'}}>
+      <div className="col-12 col-lg-6">
         <div>
-          <header className="mt-2 p-4 text-white text-center rounded" style={{backgroundColor: '#84B9F9'}}>
+          <header className="mt-2 p-4 text-white text-center rounded">
             <h1 style={{fontWeight: 700,color:'#ffffff'}}> Upcoming Meetings </h1>
           </header>
         </div>

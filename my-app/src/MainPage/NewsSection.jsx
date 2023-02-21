@@ -1,8 +1,10 @@
+import './Mainpage.css'
+
 function NewsSection() {
     return (
-      <div className="col-12 col-lg-6" style={{display:'inline-block'}}>
-        <header className="mt-2 p-4 text-white text-center rounded" style={{backgroundColor: '#B59EC1'}}>
-          <h1 style={{fontWeight: 700, color:'#ffffff'}}> Latest News </h1>
+      <div className="col-12 col-lg-6">
+        <header className="mt-2 p-4 text-white text-center rounded">
+          <h1 > Latest News </h1>
         </header>
         <ul>
           <li className="page_li">

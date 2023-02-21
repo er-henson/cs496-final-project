@@ -1,12 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-
+import './Mainpage.css'
 function Navbar()
 {
     return (
-    <nav className="navbar navbar-expand-sm" style={{backgroundColor: '#4D81A7'}}>
+    <nav className="navbar navbar-expand-sm">
     <div className="container-fluid">
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu" style={{color: '#FFFFFF'}}>
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu">
             <span className="bi-grid-1x2-fill"></span>
         </button>
         <div className="collapse navbar-collapse" id="mainMenu">
