@@ -6,6 +6,7 @@ import './site_style.css'
 
 import Jumbotron from './MainPage/Jumbotron';
 import Navbar from './MainPage/Navbar';
+import CreateAccount from './Pages/CreateAccount';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -13,7 +14,7 @@ root.render(
   <BrowserRouter>
     <Jumbotron />
     <Navbar />
-    <App/>
+    <CreateAccount />
   </BrowserRouter>
   </React.StrictMode>
 );
