@@ -1,4 +1,4 @@
-import './Mainpage.css'
+import '../App.css'
 
 function NewsSection() {
     return (

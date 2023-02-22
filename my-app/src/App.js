@@ -8,8 +8,8 @@ function App() {
     <>
       <div className="container" >
         <div className="row">
-          <NewsSection />
-          <MeetingSection />
+           <NewsSection/>
+          <MeetingSection/>
         </div>
         <Footer/>
       </div>
