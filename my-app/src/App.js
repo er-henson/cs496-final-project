@@ -1,22 +1,17 @@
 import React from 'react';
 import './App.css';
-import MeetingsSection from './MainPage/MeetingSection'
+import MeetingSection from './MainPage/MeetingSection'
 import NewsSection from './MainPage/NewsSection'
-
+import Footer from './Components/Footer'
 function App() {
   return (
     <>
       <div className="container" >
         <div className="row">
-          <NewsSection />
-          <MeetingsSection />
+           <NewsSection/>
+          <MeetingSection/>
         </div>
-      </div>
-      <div className="jumbotron mt-2 p-4 text-center text-white">
-        <p >
-          Contact us at: 555-555-5555<br/>
-          prssaloy@loyola.edu
-        </p>
+        <Footer/>
       </div>
     </>
   );

@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import {BrowserRouter} from "react-router-dom";
+import {BrowserRouter,Routes,Route} from "react-router-dom";
 import App from './App';
+import UpcomingMeetings from './Pages/UpcomingMeetings';
 import './site_style.css'
-
 import Jumbotron from './MainPage/Jumbotron';
 import Navbar from './MainPage/Navbar';
-import CreateAccount from './Pages/CreateAccount';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -14,7 +13,10 @@ root.render(
   <BrowserRouter>
     <Jumbotron />
     <Navbar />
-    <CreateAccount />
+    <Routes>
+      <Route exact path="/" element={<App/>}/>
+      <Route exact path="/UpcomingMeetings" element={<UpcomingMeetings/>}/>
+    </Routes>
   </BrowserRouter>
   </React.StrictMode>
 );

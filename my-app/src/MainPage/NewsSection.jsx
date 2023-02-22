@@ -1,9 +1,9 @@
-import './Mainpage.css'
+import '../App.css'
 
 function NewsSection() {
     return (
       <div className="col-12 col-lg-6">
-        <header className="mt-2 p-4 text-white text-center rounded">
+        <header className="mt-2 p-4 text-white text-center rounded" style={{backgroundColor:'#84B9F9'}}>
           <h1 > Latest News </h1>
         </header>
         <ul>
