@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Footer from '../Components/Footer'
 function UpcomingMeetings() {
   return (
     <div>
@@ -40,9 +40,6 @@ function UpcomingMeetings() {
           </div>
         </div>
       </main>
-      <footer className="jumbotron mt-2 p-4 text-center text-white" style={{ backgroundColor: '#4D813E' }}>
-        <p>© 2023 PRSSA All Rights Reserved</p>
-      </footer>
     </div>
   );
 }
