@@ -22,8 +22,14 @@ const meetingSchema = new mongoose.Schema(
     location: String,
     content: String
 });
-const meetingModel = mongoose.model('Meeting',meetingSchema);
+const upcomingSchema = new mongoose.Schema({
+    date: { type: Date, required: true },
+    time: { type: String, required: true },
+    meetingType: { type: String, required: true },
+  });
 
+const meetingModel = mongoose.model('Meeting',meetingSchema);
+const upcomingModel = mongoose.model('Upcoming',upcomingSchema);
 /*
  function to save a meeting to the database using a JSON object
  assumes the 'meeting' JSON object has:
@@ -39,7 +45,6 @@ exports.create = async function(meeting)
     await mongoMeeting.save();
     return await exports.readByID(mongoMeeting._id);
 }
-
 /*
 function to read all saved meetings from the database
 */
