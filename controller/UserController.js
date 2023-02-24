@@ -1,5 +1,4 @@
 const dao = require('../model/UserDAO');
-
 /*
 setting the DAO, for testing purposes
 */
@@ -40,7 +39,3 @@ exports.saveUser = function(request, response)
         response.send(null);
     }
 }
-
-/*
-login as a user
-*/

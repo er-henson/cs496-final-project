@@ -1,7 +1,7 @@
 // connecting to database
-//require('dotenv').config();
-//const dbcon = require('./model/DBConnection');
-//dbcon.connect('test'); // add 'test' in parenthises to connect to the test DB. remove otherwise
+require('dotenv').config();
+const dbcon = require('./model/DBConnection');
+dbcon.connect('test'); // add 'test' in parenthises to connect to the test DB. remove otherwise
 
 // necessary imports
 const express = require('express'); //import express
@@ -9,7 +9,7 @@ const morgan = require('morgan'); //import morgan for logging
 const session = require('express-session');
 const cors = require('cors');
 
-app = express();
+const app = express();
 
 
 const userController = require('./controller/UserController'); // creating the controller
@@ -25,8 +25,8 @@ let port = 4000;
 
 
 //operations to interact with the database. functions defined in the controller
-app.post('/newuser', userController.saveUser);
-
+app.get('/abcd', userController.readAll);
+app.get('/createOne', userController.createOne);
 
 const server = app.listen(port, hostname, 
     function()
