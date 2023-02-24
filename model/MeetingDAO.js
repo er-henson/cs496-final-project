@@ -22,14 +22,7 @@ const meetingSchema = new mongoose.Schema(
     location: String,
     content: String
 });
-const upcomingSchema = new mongoose.Schema({
-    date: { type: Date, required: true },
-    time: { type: String, required: true },
-    meetingType: { type: String, required: true },
-  });
-
 const meetingModel = mongoose.model('Meeting',meetingSchema);
-const upcomingModel = mongoose.model('Upcoming',upcomingSchema);
 /*
  function to save a meeting to the database using a JSON object
  assumes the 'meeting' JSON object has:
@@ -38,36 +31,41 @@ const upcomingModel = mongoose.model('Upcoming',upcomingSchema);
     topic - String
     location - String
     content - String
-*/
-exports.create = async function(meeting)
-{
-    const mongoMeeting = new meetingModel(meeting);
-    await mongoMeeting.save();
-    return await exports.readByID(mongoMeeting._id);
-}
-/*
-function to read all saved meetings from the database
-*/
-exports.readAll = async function()
-{
-    let meetings = await meetingModel.find({}).lean();
-    return meetings;
-}
 
-/*
-function to read a specific meeting by id
 */
-exports.readByID = async function(id)
-{
-    let meeting = await meetingModel.findById(id).lean();
-    return meeting;
+exports.getUpcomingMeetings = async function(getUpcomingMeetings){
+    
 }
+exports.getMeetingLogs = async function(getMeetingLogs){}
+// exports.create = async function(meeting)
+// {
+//     const mongoMeeting = new meetingModel(meeting);
+//     await mongoMeeting.save();
+//     return await exports.readByID(mongoMeeting._id);
+// }
+// /*
+// function to read all saved meetings from the database
+// */
+// exports.readAll = async function()
+// {
+//     let meetings = await meetingModel.find({}).lean();
+//     return meetings;
+// }
 
-/*
-function to delete all data
-SUPER, SUPER DANGEROUS! Only for testing purposes!
-*/
-exports.deleteAll = async function()
-{
-    await meetingModel.deleteMany();
-}
+// /*
+// function to read a specific meeting by id
+// */
+// exports.readByID = async function(id)
+// {
+//     let meeting = await meetingModel.findById(id).lean();
+//     return meeting;
+// }
+
+// /*
+// function to delete all data
+// SUPER, SUPER DANGEROUS! Only for testing purposes!
+// */
+// exports.deleteAll = async function()
+// {
+//     await meetingModel.deleteMany();
+// }
