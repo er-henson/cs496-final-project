@@ -1,12 +1,14 @@
 const dbcon = require('../model/DBConnection');
-const dao = require('../model/MeetingDAO.js');
+const dao = require('../model/MeetingDAO');
 beforeAll(async function(){
     await dbcon.connect('test');
+    //jest.setTimeout(20000);
 });
 afterAll(async function(){
     await dao.deleteAll();
     await dbcon.disconnect();
 });
+
 test('Read all meetings', async function()
 {
     await dao.deleteAll();
@@ -25,4 +27,4 @@ test('Creating a new meeting', async function()
     };
     let createdMeeting = await dao.create(testMeeting);
     expect(createdMeeting.speaker).toBe("mr. monkey");
-})
+});
