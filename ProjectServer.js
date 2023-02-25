@@ -8,6 +8,7 @@ const express = require('express'); //import express
 const morgan = require('morgan'); //import morgan for logging
 const session = require('express-session');
 const cors = require('cors');
+const memorystore = require('memorystore')(session);
 
 const app = express();
 

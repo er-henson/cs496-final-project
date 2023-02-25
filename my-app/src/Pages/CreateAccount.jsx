@@ -10,23 +10,11 @@ function CreateAccount()
     const [password, setPassword] = React.useState("");
     const [username, setUsername] = React.useState("");
     
-    function handleSubmit()
+    function handleSubmit(e)
     {
-        const baseURL = "http://localhost:4000/newuser"
-        console.log("Form submitted.")
-        /*
-        // prevents browser from reloading the page
         e.preventDefault();
+        const baseURL = "http://localhost:4000/saveuser";
         
-        // get the event and save the form data
-        const form = e.target
-        const formData = new FormData(form);
-        
-        // convert the form data to a JSON
-        const formJson = Object.fromEntries(formData.entries());
-        
-        console.log(formJson);
-        */
         let user = 
         {
             email: email,
@@ -34,16 +22,17 @@ function CreateAccount()
             username: username
             
         };
-        console.log(user);
+        console.log(JSON.stringify(user));
         
         // perform post action, submitting a new user with the JSON from the form
         axios.post(baseURL, user)
         .then((response) => 
         {
-            console.log( JSON.stringify(response.data) );
+            console.log( JSON.stringify(response) );
         })
         .catch((error) =>
         {
+            console.log('we\'ve got an error, people!');
             console.log(error);
         });
     }

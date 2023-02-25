@@ -12,7 +12,7 @@ exports.setDAO = function(otherDAO)
 /*
 save a user in the database
 */
-exports.saveUser = function(request, response)
+exports.saveUser = async function(request, response)
 {
     console.log(request.body);
     
@@ -27,22 +27,23 @@ exports.saveUser = function(request, response)
     // save the user in the DAO
     let savedUser = await dao.create(newUser);
     // if the return is not null, the user is created
-    if(returnedUser !== null)
+    if(savedUser !== null)
     {        
-        response.status(200);
+        response.status(300);
+        response.redirect('/');
     }
     else // if the return is null, there is a user with the existing email
     {
         response.status(401);
+        response.send( {msg: 'User with that email already exists'} );
+        response.end();
     }
-    // TODO - page redirects in react
-    response.end();
 }
 
 /*
 login as a user
 */
-exports.login = function(request, response)
+exports.login = async function(request, response)
 {
     let email = request.body.email;
     let pw = passUtil.hashPassword(request.body.password);
@@ -53,12 +54,13 @@ exports.login = function(request, response)
     {
         user.password = null; // set password to null for security
         request.session.user = user;
-        response.status(200);
+        response.status(300);
+        response.redirect('/');
     }
     else // incorrect login
     {
-        response.status(404);
+        response.status(401);
+        response.send( {msg: 'Invalid credentials'} );
+        response.end();
     }
-    // TODO - page redirects in react
-    response.end();
 }
