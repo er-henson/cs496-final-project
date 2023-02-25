@@ -58,3 +58,9 @@ test('Login with correct credentials', async function()
     expect(retUser.username).toBe("dave");
     expect(retUser.admin).toBe(0);
 });
+
+test('Login with incorrect credentials', async function()
+{
+    let retUser = await dao.login("sneakman@jetset.net", "i, in fact, do have time for secrets!");
+    expect(retUser).toBe(null);
+});
