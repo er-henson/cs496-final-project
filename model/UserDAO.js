@@ -45,7 +45,7 @@ exports.create = async function(newUser)
         const mongoUser = new userModel(newUser);
         await mongoUser.save();
         let dbUser = await userModel.findById( mongoUser._id ).lean();
-        console.log(dbUser);
+        //console.log(dbUser);
         return dbUser;
     }
 }
@@ -68,6 +68,19 @@ exports.readyByName = async function(userName)
     return users;
 }
 
+exports.login = async function(userEmail, userPassword)
+{
+    let user = await userModel.find( {email:userEmail, password:userPassword} ).lean();
+    // both credentials match
+    if (user.length > 0)
+    {
+        return user[0];
+    }
+    else
+    {
+        return null;
+    }
+}
 
 /*
 SUPER DANGEROUS FUNCTION

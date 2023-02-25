@@ -1,5 +1,6 @@
 const dbcon = require('../model/DBConnection');
 const dao = require('../model/UserDAO');
+
 beforeAll(async function(){
     await dbcon.connect('test');
 });
@@ -13,10 +14,10 @@ test('Create new user', async function()
     // creating data to insert
     let newUser = 
     {
-    username: "dave",
-    email: "sneakman@jetset.net",
-    password: "i have no time for secrets!",
-    admin: 0
+        username: "dave",
+        email: "sneakman@jetset.net",
+        password: "i have no time for secrets!",
+        admin: 0
     };
     // testing the 'create' function
     let newAcct = await dao.create(newUser);
@@ -49,4 +50,11 @@ test('Create new user when there is an existing user with the same email', async
     expect(newAcct.email).toBe(newUser.email);
     // alt account should be null
     expect(altAcct).toBe(null);
+});
+
+test('Login with correct credentials', async function()
+{
+    let retUser = await dao.login("sneakman@jetset.net", "i have no time for secrets!");
+    expect(retUser.username).toBe("dave");
+    expect(retUser.admin).toBe(0);
 });
