@@ -1,4 +1,4 @@
-const dao = require('../model/UserDAO');
+let dao = require('../model/UserDAO');
 const passUtil = require('../util/PasswordUtil');
 /*
 setting the DAO, for testing purposes
@@ -30,7 +30,7 @@ exports.saveUser = async function(request, response)
     if(savedUser !== null)
     {        
         response.status(300);
-        response.redirect('/');
+        response.redirect('/Login');
     }
     else // if the return is null, there is a user with the existing email
     {
