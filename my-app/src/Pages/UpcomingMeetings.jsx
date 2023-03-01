@@ -34,7 +34,9 @@ function UpcomingMeetings() {
     e.preventDefault();
     try {
       console.log({date,time,speaker,topic,location,content})
-      // const response = await axios.post('http://localhost:4000/post_upcoming', { date, time, type });
+      //save meetings to backend
+      const response = await axios.post('http://localhost:4000/saveMeeting', {date,time,speaker,topic,location,content});
+      console.log(response);
     } catch (err) {
       console.error(err);
     }
@@ -72,8 +74,6 @@ function UpcomingMeetings() {
             <label htmlFor="meetingDate">Content</label>
             <input type="text" className="form-control" id="content" onChange={(e) => setContent(e.target.value)} />
           </div>
-
-
           <button type="submit" className="btn btn-primary">Submit</button>
         </form>
       </div>

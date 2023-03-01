@@ -36,6 +36,8 @@ read all meetings currently saved in the database
 exports.readAllMeetings = async function(request, response)
 {
     let allMeetings = dao.readAll();
+    console.log(allMeetings);
     response.status(200);
     response.send(allMeetings);
+
 }
