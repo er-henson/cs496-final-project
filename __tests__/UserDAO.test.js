@@ -64,3 +64,45 @@ test('Login with incorrect credentials', async function()
     let retUser = await dao.login("sneakman@jetset.net", "i, in fact, do have time for secrets!");
     expect(retUser).toBe(null);
 });
+
+test('Read user information from username', async function()
+{
+    //creating data to insert
+    let newUser = 
+    {
+        username: "dave2",
+        email: "sneakerman@jetset.net",
+        password: "i have no time for secrets!",
+        admin: 0
+    };
+    
+    // save user to the DB
+    //await dao.create(newUser);
+    
+    // read user based on username
+    let returnedUser = await dao.readByName(newUser.username);
+    console.log(returnedUser);
+    
+    expect(returnedUser[0].email).toBe(newUser.email);
+});
+
+test('Read user information from email', async function()
+{
+    //creating data to insert
+    let newUser = 
+    {
+        username: "dave2",
+        email: "sneakerman@jetset.net",
+        password: "i have no time for secrets!",
+        admin: 0
+    };
+    
+    // save user to the DB
+    //await dao.create(newUser);
+    
+    // read user based on email
+    let returnedUser = await dao.readByEmail(newUser.email);
+    console.log(returnedUser);
+    
+    expect(returnedUser.username).toBe(newUser.username);
+});

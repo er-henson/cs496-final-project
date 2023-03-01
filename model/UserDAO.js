@@ -55,22 +55,22 @@ read a user by their email
 */
 exports.readByEmail = async function(userEmail)
 {
-    let user = await userModel.find( {email: userEmail} ).lean();
-    return user;
+    let user = await userModel.find( {email: userEmail}, {password:false} ).lean();
+    return user[0];
 }
 
 /*
 read users by their names
 */
-exports.readyByName = async function(userName)
+exports.readByName = async function(userName)
 {
-    let users = await userModel.find({username: userName}).lean();
+    let users = await userModel.find({username: userName}, {password:false}).lean();
     return users;
 }
 
 exports.login = async function(userEmail, userPassword)
 {
-    let user = await userModel.find( {email:userEmail, password:userPassword} ).lean();
+    let user = await userModel.find( {email:userEmail, password:userPassword}, {password:false} ).lean();
     // both credentials match
     if (user.length > 0)
     {
