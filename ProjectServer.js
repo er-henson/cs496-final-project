@@ -14,7 +14,7 @@ const app = express();
 
 
 const userController = require('./controller/UserController'); // controller for user information
-//const meetingController = require('./controller/MeetingController'); // controller for meeting/event information
+const meetingController = require('./controller/MeetingController'); // controller for meeting/event information
 
 app.use( morgan('dev') );
 app.use( express.urlencoded({extended:true}) );
@@ -42,7 +42,8 @@ app.post('/saveuser', userController.saveUser);
 app.post('/dologin', userController.login);
 
 // MeetingController operations
-// TODO - place meeting controller stuff here
+app.post('/savemeeting', meetingController.saveMeeting);
+app.get('/allmeetings', meetingController.readAllMeetings);
 
 const server = app.listen(port, hostname, 
     function()
