@@ -1,51 +1,41 @@
+let dao = require('../model/MeetingDAO');
 /*
-The schema for storing data related to meetings, both past and upcoming
+setting the DAO, for testing purposes
 */
-const f = function getCurrentDate(){
-
-    let newDate = new Date()
-    let day = newDate.getDate();
-    let month = newDate.getMonth() + 1;
-    let year = newDate.getFullYear();
-    let hours = newDate.getHours()
-    let minutes = newDate.getMinutes()
-    return `${month<10?`0${month}`:`${month}`}${'/'}${day}${'/'}${year}${" "}${hours}${":"}${minutes}`
-  }
-
-const mongoose = require('mongoose');
-
-/*
-important data fields are:
-    Date
-    Speaker
-    Topic
-    Location
-    Text Content
-    Image Content
-    Rating
-*/
-const meetingSchema = new mongoose.Schema(
+exports.setDAO = function(otherDAO)
 {
-    date:{ type:Date, default:Date.now },
-    speaker: String,
-    topic: String,
-    location: String,
-    content: String
-});
-const meetingModel = mongoose.model('Meeting',meetingSchema);
-/*
- function to save a meeting to the database using a JSON object
- assumes the 'meeting' JSON object has:
-    date - Date
-    speaker - String
-    topic - String
-    location - String
-    content - String
-
-*/
-exports.getUpcomingMeetings = async function(getUpcomingMeetings){
-    
+    dao = otherDAO;
 }
-exports.getMeetingLogs = async function(getMeetingLogs){
+
+/*
+POST request
+save a new meeting to the DAO
+*/
+exports.saveMeeting = async function(request, response)
+{
+    // assumes the request body gives all variable values individually
+    let newMeeting = 
+    {
+        date: request.body.date,
+        speaker: request.body.speaker,
+        topic: request.body.topic,
+        location: request.body.location,
+        content: request.body.content
+    };
     
+    let savedMeeting = dao.create(newMeeting);
+    
+    response.status(200);
+    response.send(savedMeeting);
+}
+
+/*
+GET request
+read all meetings currently saved in the database
+*/
+exports.readAllMeetings = async function(request, response)
+{
+    let allMeetings = dao.readAll();
+    response.status(200);
+    response.send(allMeetings);
 }
