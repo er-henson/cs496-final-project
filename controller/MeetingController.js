@@ -41,3 +41,25 @@ exports.readAllMeetings = async function(request, response)
     response.send(allMeetings);
 
 }
+
+/*
+GET request
+read all meetings that occured in the past
+*/
+exports.readPastMeeting = async function(request, response)
+{
+    let pastMeetings = dao.getPastMeetings();
+    response.status(200);
+    response.send(pastMeetings);
+}
+
+/*
+GET request
+read all meetings that will occur in the future
+*/
+exports.readPastMeeting = async function(request, response)
+{
+    let futureMeetings = dao.getUpcomingMeetings();
+    response.status(200);
+    response.send(futureMeetings);
+}

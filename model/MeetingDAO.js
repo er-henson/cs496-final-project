@@ -67,12 +67,26 @@ exports.deleteAll = async function()
     await meetingModel.deleteMany();
 }
 
-
-exports.getUpcomingMeetings = async function(getUpcomingMeetings)
+/*
+function to query all meetings that are set to occur after the current date
+*/
+exports.getUpcomingMeetings = async function()
 {
-    
+    // get the current time
+    let currentDate = new Date();
+    // query for dates greater than the current one
+    let futureMeetings = await meetingModel.find({date: {$gt: currentDate}}).lean();
+    return futureMeetings;
 }
-exports.getMeetingLogs = async function(getMeetingLogs)
+
+/*
+function to query all meetings created before the current date
+*/
+exports.getPastMeetings = async function()
 {
-    
+    // get the current time
+    let currentDate = new Date();
+    // query for dates less than the current one
+    let pastMeetings = await meetingModel.find({date: {$lt: currentDate}}).lean();
+    return pastMeetings;
 }

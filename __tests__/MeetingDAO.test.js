@@ -28,3 +28,83 @@ test('Creating a new meeting', async function()
     let createdMeeting = await dao.create(testMeeting);
     expect(createdMeeting.speaker).toBe("mr. monkey");
 });
+
+
+test('Finding a future meeting', async function()
+{
+    let futureMeeting = 
+    {
+        date: new Date("February 18, 2024"),
+        speaker: "john carmack",
+        topic: "how i invented all computers everywhere",
+        location: "in a doom multiplayer lobby",
+        content: "this meeting will happen in the future"
+    };
+    let pastMeeting = 
+    {
+        date: new Date("February 7, 2022"),
+        speaker: "tardigrade",
+        topic: "surviving anything except actual threats",
+        location: "the vacuum of space under high radiation",
+        content: "this meeting has already happened"
+    };
+    
+    let createdFutureMeeting = await dao.create(futureMeeting);
+    let createdPastMeeting = await dao.create(pastMeeting);
+    
+    // function in question that we want to test
+    let storedFutureMeeting = await dao.getUpcomingMeetings();
+    
+    expect(storedFutureMeeting.length).toBe(1);
+    expect(storedFutureMeeting[0].speaker).toBe(futureMeeting.speaker);
+    expect(storedFutureMeeting[0].topic).toBe(futureMeeting.topic);
+    expect(storedFutureMeeting[0].content).toBe(futureMeeting.content);
+});
+
+test('Finding a past meeting', async function()
+{
+    /*
+    ---
+    both of these meetings should still be stored in the DB from the previous test
+    ---
+    
+    let futureMeeting = 
+    {
+        date: new Date("February 18, 2024"),
+        speaker: "john carmack",
+        topic: "how i invented all computers everywhere",
+        location: "in a doom multiplayer lobby",
+        content: "this meeting will happen in the future"
+    };
+    let pastMeeting = 
+    {
+        date: new Date("February 7, 2022"),
+        speaker: "tardigrade",
+        topic: "surviving anything except actual threats",
+        location: "the vacuum of space under high radiation",
+        content: "this meeting has already happened"
+    };
+    
+    let createdFutureMeeting = await dao.create(futureMeeting);
+    let createdPastMeeting = await dao.create(pastMeeting);
+    */
+    let pastMeeting = 
+    {
+        date: new Date("February 7, 2022"),
+        speaker: "tardigrade",
+        topic: "surviving anything except actual threats",
+        location: "the vacuum of space under high radiation",
+        content: "this meeting has already happened"
+    };
+    
+    // function in question that we want to test
+    let storedPastMeeting = await dao.getPastMeetings();
+    console.log(storedPastMeeting);
+    
+    // setting the length to '2' because the 'mr. monkey' meeting is still in the DB
+    // same reason that the pastMeeting in this test is at index '1' instead of '0'
+    expect(storedPastMeeting.length).toBe(2);
+    expect(storedPastMeeting[1].speaker).toBe(pastMeeting.speaker);
+    expect(storedPastMeeting[1].topic).toBe(pastMeeting.topic);
+    expect(storedPastMeeting[1].content).toBe(pastMeeting.content);
+});
