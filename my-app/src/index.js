@@ -3,18 +3,23 @@ import ReactDOM from 'react-dom/client';
 import {BrowserRouter,Routes,Route} from "react-router-dom";
 import App from './App';
 import UpcomingMeetings from './Pages/UpcomingMeetings';
-import './site_style.css'
+import CreateAccount from './Pages/CreateAccount';
+import CreateMeeting from './Pages/CreateMeeting'
+import './site_style.css';
 import Jumbotron from './MainPage/Jumbotron';
 import Navbar from './MainPage/Navbar';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+  <Jumbotron />
   <BrowserRouter>
-    <Jumbotron />
     <Navbar />
     <Routes>
       <Route exact path="/" element={<App/>}/>
+      <Route exact path="/Home" element={<App/>}/>
+      <Route exact path="/CreateMeeting" element={<CreateMeeting/>}/>
+      <Route exact path="/CreateAccount" element={<CreateAccount/>}/>
       <Route exact path="/UpcomingMeetings" element={<UpcomingMeetings/>}/>
     </Routes>
   </BrowserRouter>

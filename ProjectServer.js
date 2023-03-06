@@ -44,6 +44,7 @@ app.post('/dologin', userController.login);
 // MeetingController operations
 app.post('/savemeeting', meetingController.saveMeeting);
 app.get('/allmeetings', meetingController.readAllMeetings);
+app.get('/upcomingmeetings', meetingController.readFutureMeetings);
 
 const server = app.listen(port, hostname, 
     function()

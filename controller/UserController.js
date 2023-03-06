@@ -55,7 +55,7 @@ exports.login = async function(request, response)
         user.password = null; // set password to null for security
         request.session.user = user;
         response.status(300);
-        response.redirect('/');
+        response.redirect('/Login');
     }
     else // incorrect login
     {

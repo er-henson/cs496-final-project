@@ -22,16 +22,29 @@ function printInputted(newDate){
 }
 
 
-function UpcomingMeetings() {
+function CreateMeeting() {
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [speaker, setSpeaker] = useState('');
   const [topic, setTopic] = useState('');
   const [location, setLocation] = useState('');
   const [content, setContent] = useState('');
+  
+  
   const handleSubmit = async (e) => {
     
     e.preventDefault();
+    
+    axios.post('http://localhost:4000/saveMeeting', {date,time,speaker,topic,location,content})
+    .then((response) =>
+    {
+        console.log(response.data);
+    })
+    .catch((error) =>
+    {
+        console.log(error);
+    });
+    /*
     try {
       console.log({date,time,speaker,topic,location,content})
       //save meetings to backend
@@ -40,6 +53,7 @@ function UpcomingMeetings() {
     } catch (err) {
       console.error(err);
     }
+    */
   };
   return (
     <div className="d-flex justify-content-center align-items-center">
@@ -81,4 +95,4 @@ function UpcomingMeetings() {
   );
 }
 
-export default UpcomingMeetings;
+export default CreateMeeting;
