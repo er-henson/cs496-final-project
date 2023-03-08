@@ -18,13 +18,26 @@ function UpcomingMeetings()
     console.log(meetings);
     
     return(
-    <>
+    <div className="d-flex justify-content-center align-items-center">
+    <div className="col-12 col-lg-6">
+    
+    {/*page header*/}
+    <div style={{ backgroundColor: '#B59EC1' }}>
+      <header className="mt-2 p-4 text-white text-center rounded">
+        <h1 style={{ fontWeight: 700, color: '#ffffff' }}> Upcoming meetings </h1>
+      </header>
+    </div>
+    
+    
+    {/* statement that checks for meetings. If they're there, display them, else show that there are 
+        no meetings    */}
     {meetings && meetings.map ? 
         <ul>
         {meetings.map((meeting) => (
-            <li>
-                <p>{meeting.topic}</p>
-                <p>{meeting.speaker}</p>
+            <li className="page_li">
+                <p><span style={{fontWeight: 700}}>Topic:</span> {meeting.topic}</p>
+                <p><span style={{fontWeight: 700}}>Speaker:</span> {meeting.speaker}</p>
+                <p style={{fontWeight: 700}}>Description:</p>
                 <p>{meeting.content}</p>
             </li>
         ))}
@@ -32,7 +45,9 @@ function UpcomingMeetings()
         :
         <h1>No meetings found</h1>
     }
-    </>
+    
+    </div>
+    </div>
     );
     
 }

@@ -23,7 +23,7 @@ exports.saveMeeting = async function(request, response)
         content: request.body.content
     };
     
-    let savedMeeting = dao.create(newMeeting);
+    let savedMeeting = await dao.create(newMeeting);
     
     response.status(200);
     response.send(savedMeeting);
@@ -35,7 +35,7 @@ read all meetings currently saved in the database
 */
 exports.readAllMeetings = async function(request, response)
 {
-    let allMeetings = dao.readAll();
+    let allMeetings = await dao.readAll();
     console.log(allMeetings);
     response.status(200);
     response.send(allMeetings);
@@ -46,9 +46,9 @@ exports.readAllMeetings = async function(request, response)
 GET request
 read all meetings that occured in the past
 */
-exports.readPastMeeting = async function(request, response)
+exports.readPastMeetings = async function(request, response)
 {
-    let pastMeetings = dao.getPastMeetings();
+    let pastMeetings = await dao.getPastMeetings();
     response.status(200);
     response.send(pastMeetings);
 }
@@ -57,9 +57,10 @@ exports.readPastMeeting = async function(request, response)
 GET request
 read all meetings that will occur in the future
 */
-exports.readPastMeeting = async function(request, response)
+exports.readFutureMeetings = async function(request, response)
 {
-    let futureMeetings = dao.getUpcomingMeetings();
+    let futureMeetings = await dao.getUpcomingMeetings();
+    console.log(futureMeetings);
     response.status(200);
     response.send(futureMeetings);
 }
