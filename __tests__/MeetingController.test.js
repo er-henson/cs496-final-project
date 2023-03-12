@@ -1,5 +1,5 @@
 const MeetingController = require('../controller/MeetingController');
-const MeetingDAO = require('../model/MeetingDAO');
+//const MeetingDAO = require('../model/MeetingDAO');
 
 describe('MeetingController', () => {
   let mockDao = null;
