@@ -15,6 +15,7 @@ test('Read all meetings', async function()
     let meetings = await dao.readAll();
     expect(meetings.length).toBe(0);
 });
+
 test('Creating a new meeting', async function()
 {
     let testMeeting = 
@@ -63,31 +64,6 @@ test('Finding a future meeting', async function()
 
 test('Finding a past meeting', async function()
 {
-    /*
-    ---
-    both of these meetings should still be stored in the DB from the previous test
-    ---
-    
-    let futureMeeting = 
-    {
-        date: new Date("February 18, 2024"),
-        speaker: "john carmack",
-        topic: "how i invented all computers everywhere",
-        location: "in a doom multiplayer lobby",
-        content: "this meeting will happen in the future"
-    };
-    let pastMeeting = 
-    {
-        date: new Date("February 7, 2022"),
-        speaker: "tardigrade",
-        topic: "surviving anything except actual threats",
-        location: "the vacuum of space under high radiation",
-        content: "this meeting has already happened"
-    };
-    
-    let createdFutureMeeting = await dao.create(futureMeeting);
-    let createdPastMeeting = await dao.create(pastMeeting);
-    */
     let pastMeeting = 
     {
         date: new Date("February 7, 2022"),
@@ -107,4 +83,29 @@ test('Finding a past meeting', async function()
     expect(storedPastMeeting[1].speaker).toBe(pastMeeting.speaker);
     expect(storedPastMeeting[1].topic).toBe(pastMeeting.topic);
     expect(storedPastMeeting[1].content).toBe(pastMeeting.content);
+});
+
+test('Updating a meeting', async function()
+{
+    // grab a meeting in the database
+    let meetings = await dao.readAll();
+    let firstMeeting = meetings[0];
+    let firstMeetingID = firstMeeting._id;
+    
+    // change everything about it except its ID
+    firstMeeting.date = new Date("August 7 2021");
+    firstMeeting.speaker = "dr breen";
+    firstMeeting.topic = "why living in city 17 is awesome";
+    firstMeeting.location = "city 17 obviously";
+    firstMeeting.content = "Welcome. Welcome to City 17.You have chosen, or been chosen, to relocate to one of our finest remaining urban centers. I thought so much of City 17 that I elected to establish my Administration here, in the Citadel so thoughtfully provided by Our Benefactors. I have been proud to call City 17 my home. And so, whether you are here to stay, or passing through on your way to parts unknown, welcome to City 17. It's safer here.";
+    
+    // create the update
+    await dao.updateMeeting(firstMeeting);
+    
+    // query for the meeting again
+    let newMeeting = await dao.readByID(firstMeetingID);
+    
+    expect(newMeeting.topic).toBe(firstMeeting.topic);
+    expect(newMeeting.speaker).toBe(firstMeeting.speaker);
+    expect(newMeeting.content).toBe(firstMeeting.content);
 });

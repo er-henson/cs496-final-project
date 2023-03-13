@@ -64,3 +64,49 @@ exports.readFutureMeetings = async function(request, response)
     response.status(200);
     response.send(futureMeetings);
 }
+
+/*
+GET request
+get a particular meeting by its ID
+*/
+exports.readMeetingByID = async function(request, response)
+{
+    let meeting = await dao.readByID(request.params.id);
+    // if the DAO finds the meeting
+    if(meeting !== null)
+    {
+        response.status(200);
+        response.send(meeting);
+    }
+    else
+    {
+        response.status(404);
+        response.send(null);
+    }
+}
+
+/*
+POST request
+update the information for a meeting
+*/
+exports.updateMeeting = async function(request, response)
+{
+    let updatedMeeting = {
+        _id: request.body._id,
+        date: request.body.date,
+        speaker: request.body.speaker,
+        topic: request.body.topic,
+        location: request.body.location,
+        content: request.body.content
+    };
+    
+}
+
+/*
+POST request
+delete a meeting
+*/
+exports.deleteMeeting = async function(request, response)
+{
+    
+}

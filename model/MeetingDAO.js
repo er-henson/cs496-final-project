@@ -22,6 +22,9 @@ const meetingSchema = new mongoose.Schema(
     location: String,
     content: String
 });
+
+
+
 const meetingModel = mongoose.model('Meeting',meetingSchema);
 /*
  function to save a meeting to the database using a JSON object
@@ -89,4 +92,14 @@ exports.getPastMeetings = async function()
     // query for dates less than the current one
     let pastMeetings = await meetingModel.find({date: {$lt: currentDate}}).lean();
     return pastMeetings;
+}
+
+/*
+function to update a meeting based on its ID
+*/
+exports.updateMeeting = async function(meetingData)
+{
+    // find the meeting by its ID
+    let editedMeeting = await meetingModel.findOneAndUpdate( {_id: meetingData._id}, meetingData, {returnOriginal: false}).lean();
+    return editedMeeting;
 }
