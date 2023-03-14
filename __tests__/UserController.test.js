@@ -60,7 +60,13 @@ test('Login with correct credentials', async function()
     await userController.login(req, res);
     
     expect(res.status).toHaveBeenCalledWith(300);
-    expect(res.redirect).toHaveBeenCalledWith('/Login');
+    expect(res.send).toHaveBeenCalledWith({
+        _id:'abc',
+        username: 'phil',
+        email: 'phil@somewhere',
+        password: null,
+        admin: 0
+    });
     expect(req.session.user).toStrictEqual(
         {
         _id:'abc',

@@ -14,7 +14,6 @@ save a user in the database
 */
 exports.saveUser = async function(request, response)
 {
-    console.log(request.body);
     
     let newUser = 
     {
@@ -29,8 +28,8 @@ exports.saveUser = async function(request, response)
     // if the return is not null, the user is created
     if(savedUser !== null)
     {        
-        response.status(300);
-        response.redirect('/Login');
+        response.status(200);
+        response.end();
     }
     else // if the return is null, there is a user with the existing email
     {
@@ -54,8 +53,9 @@ exports.login = async function(request, response)
     {
         user.password = null; // set password to null for security
         request.session.user = user;
-        response.status(300);
-        response.redirect('/Login');
+        response.status(200);
+        console.log(request.session);
+        response.send(request.session.user);
     }
     else // incorrect login
     {
@@ -63,4 +63,27 @@ exports.login = async function(request, response)
         response.send( {msg: 'Invalid credentials'} );
         response.end();
     }
+}
+
+/*
+get the logged-in user
+*/
+exports.getLoggedUser = async function(request, response)
+{
+    console.log("current session status: ");
+    console.log(request.session);
+    
+    response.status(200);
+    response.send(request.session.user);
+    response.end();
+}
+
+/*
+log the user out of the session
+*/
+exports.logout = async function(request, response)
+{
+    request.session.user = null;
+    response.status(200);
+    response.send(null);
 }

@@ -100,6 +100,18 @@ exports.updateMeeting = async function(request, response)
         content: request.body.content
     };
     
+    let returnedMeeting = await dao.updateMeeting(updatedMeeting);
+    
+    if(returnedMeeting !== null)
+    {
+        response.status(202);
+        response.send(returnedMeeting);
+    }
+    else
+    {
+        response.status(404);
+        response.send(null);
+    }
 }
 
 /*

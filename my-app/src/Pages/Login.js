@@ -1,18 +1,22 @@
 import React from 'react';
 import axios from 'axios';
-//import PasswordField from '../Components/PasswordField';
+import { useNavigate } from 'react-router-dom';
 
 
 
-function CreateAccount() 
+function Login() 
 {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     
-    function handleSubmit()
+    let navigate = useNavigate();
+    
+    function handleSubmit(e)
     {
+        // stop the page from reloading
+        e.preventDefault();
+        
         const baseURL = "http://localhost:4000/";
-        console.log("Form submitted.");
         
         let user = 
         {
@@ -26,11 +30,25 @@ function CreateAccount()
         axios.post(baseURL+"dologin", user)
         .then((response) => 
         {
-            // TODO - figure out how to redirect/display errors from response
-            console.log( JSON.stringify(response) );
+            // TODO - update frontend to change after logging in rather than using useEffect
+            axios.get(baseURL + "getlogged")
+            .then((response) => 
+            {
+                console.log("got logged user successfully:")
+                console.log(response.data)
+            })
+            .catch((error) =>
+            {
+                console.log("error trying to get logged user");
+                console.log(error)
+            })
+            
+            let path = '/Home';
+            navigate(path);
         })
         .catch((error) =>
         {
+            console.log("error trying to log in");
             console.log(error);
         });
     }
@@ -56,7 +74,7 @@ function CreateAccount()
             <label className="col-form-label col-12 col-md-1" htmlFor="txt_pass"> Password: </label>
               <input 
                 value={password}
-                onChange={ e => setPassword(e.target.value)}className="form-control" name="password" id="txt_pass" minLength="6" required />
+                onChange={ e => setPassword(e.target.value)} className="form-control" name="password" id="txt_pass" minLength="6" required />
             <br/>
             <button type="submit" className="btn btn-primary" >Submit</button>
         </form>
@@ -65,4 +83,4 @@ function CreateAccount()
     );
 }
 
-export default CreateAccount;
+export default Login;

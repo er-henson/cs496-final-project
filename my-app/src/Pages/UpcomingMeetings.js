@@ -1,21 +1,26 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { redirect } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import EditMeeting from './EditMeeting';
 
 function UpcomingMeetings()
 {
+    const navigate = useNavigate();
     const [meetings,setMeetings] = React.useState({});
+    
+    
+    const toEditPage = (meetingID) => {
+        navigate('/EditMeeting', {state:{id:meetingID}});
+    }
     
     useEffect(() => {
         
-        axios.get("http://localhost:4000/upcomingmeetings").
-        then((response) => {
+        axios.get("http://localhost:4000/upcomingmeetings")
+        .then((response) => {
             setMeetings(response.data);
         })
         
     }, []);
-    
-    console.log(meetings);
     
     return(
     <div className="d-flex justify-content-center align-items-center">
@@ -29,12 +34,16 @@ function UpcomingMeetings()
     </div>
     
     
-    {/* statement that checks for meetings. If they're there, display them, else show that there are 
-        no meetings    */}
-    {meetings && meetings.map ? 
+    {/* statement that checks for meetings. If they're there, display them. If not, show that there are 
+        no meetings */}
+    {meetings && meetings.map ? // the 'if' condition. if 'meetings' and 'meetings.map' are not null,...
         <ul>
         {meetings.map((meeting) => (
             <li className="page_li">
+                {/* link to the page to edit a particular meeting. links with the meeting ID so that page can use a GET request.*/}
+                <button onClick={()=>{toEditPage(meeting._id)}}> Edit </button>
+                
+                {/* layout for the meeting itself. */}
                 <p><span style={{fontWeight: 700}}>Topic:</span> {meeting.topic}</p>
                 <p><span style={{fontWeight: 700}}>Speaker:</span> {meeting.speaker}</p>
                 <p style={{fontWeight: 700}}>Description:</p>

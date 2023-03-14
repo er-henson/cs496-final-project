@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
+/*
 function setCurrentDate(minute,hour,day,month,year){
 
   let newDate = new Date()
@@ -20,7 +23,7 @@ function printInputted(newDate){
   let minutes = newDate.getMinutes()
   console.log(`${month<10?`0${month}`:`${month}`}${'/'}${day}${'/'}${year}${" "}${hours}${":"}${minutes}`)
 }
-
+*/
 
 function CreateMeeting() {
   const [date, setDate] = useState('');
@@ -29,16 +32,20 @@ function CreateMeeting() {
   const [topic, setTopic] = useState('');
   const [location, setLocation] = useState('');
   const [content, setContent] = useState('');
-  
+  let navigate = useNavigate();
   
   const handleSubmit = async (e) => {
-    
+    // stop the page from reloading
     e.preventDefault();
     
-    axios.post('http://localhost:4000/saveMeeting', {date,time,speaker,topic,location,content})
+    // send the meeting to the backend
+    axios.post('http://localhost:4000/savemeeting', {date,time,speaker,topic,location,content})
     .then((response) =>
     {
         console.log(response.data);
+        // redirect to the page with upcoming meetings
+        let path = '/UpcomingMeetings';
+        navigate(path);
     })
     .catch((error) =>
     {
@@ -54,6 +61,8 @@ function CreateMeeting() {
       console.error(err);
     }
     */
+    
+
   };
   return (
     <div className="d-flex justify-content-center align-items-center">

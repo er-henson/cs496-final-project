@@ -19,14 +19,14 @@ const meetingController = require('./controller/MeetingController'); // controll
 app.use( morgan('dev') );
 app.use( express.urlencoded({extended:true}) );
 app.use( express.json() );
-app.use( cors() );
+app.use( cors());
 
 // session settings
 app.use(session({
     secret: 'some morally upsetting hypocrisy of uncountably infinite suffering',
-    cookie: {maxAge: 86400000 }, // = 1000*60*60*24 = 24Hours
+    cookie: {maxAge: 86400000, secure:false }, // = 1000*60*60*24 = 24Hours
     store: new memorystore({ checkPeriod:86400000 }),
-    resave: false,
+    resave: true,
     saveUninitialized: true
 }));
 
@@ -40,11 +40,16 @@ let port = 4000;
 // UserController operations
 app.post('/saveuser', userController.saveUser);
 app.post('/dologin', userController.login);
+app.get('/getlogged', userController.getLoggedUser);
+app.get('/logout', userController.logout);
+
 
 // MeetingController operations
 app.post('/savemeeting', meetingController.saveMeeting);
+app.post('/updatemeeting', meetingController.updateMeeting);
 app.get('/allmeetings', meetingController.readAllMeetings);
 app.get('/upcomingmeetings', meetingController.readFutureMeetings);
+app.get('/meeting/:id', meetingController.readMeetingByID);
 
 const server = app.listen(port, hostname, 
     function()

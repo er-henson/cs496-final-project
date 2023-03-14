@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 //import PasswordField from '../Components/PasswordField';
 
 
@@ -10,6 +10,8 @@ function CreateAccount()
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [username, setUsername] = React.useState("");
+    
+    let navigate = useNavigate();
     
     function handleSubmit(e)
     {
@@ -31,7 +33,8 @@ function CreateAccount()
         {
             //console.log( JSON.stringify(response) );
             // redirect to the page specified by the response's 'redirect' function
-            redirect(response.redirect);
+            let path = '/Login';
+            navigate(path);
         })
         .catch((error) =>
         {

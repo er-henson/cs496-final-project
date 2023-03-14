@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {BrowserRouter,Routes,Route,NavLink} from "react-router-dom";
+import axios from 'axios';
 
 import App from './App';
 
@@ -8,10 +9,17 @@ import UpcomingMeetings from './Pages/UpcomingMeetings';
 import CreateAccount from './Pages/CreateAccount';
 import CreateMeeting from './Pages/CreateMeeting';
 import Login from './Pages/Login';
+import EditMeeting from './Pages/EditMeeting'
 
 import './site_style.css';
 import Jumbotron from './MainPage/Jumbotron';
 import Navbar from './MainPage/Navbar';
+// TODO - figure out a wrapper element for stuff in the BrowserRouter to get the login to work with the navbar
+//      could be advantageous to do this since it'd divorce the logged-in user's information from strictly staying
+//      in one component
+
+
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -26,6 +34,7 @@ root.render(
       <Route exact path="/CreateAccount" element={<CreateAccount/>}/>
       <Route exact path="/Login" element={<Login/>}/>
       <Route exact path="/UpcomingMeetings" element={<UpcomingMeetings/>}/>
+      <Route exact path="/EditMeeting" element={<EditMeeting/>}/>
     </Routes>
   </BrowserRouter>
   </React.StrictMode>
