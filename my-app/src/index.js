@@ -10,6 +10,7 @@ import CreateAccount from './Pages/CreateAccount';
 import CreateMeeting from './Pages/CreateMeeting';
 import Login from './Pages/Login';
 import EditMeeting from './Pages/EditMeeting'
+import PastMeetings from './Pages/PastMeetings'
 
 import './site_style.css';
 import Jumbotron from './MainPage/Jumbotron';
@@ -34,6 +35,7 @@ root.render(
       <Route exact path="/CreateAccount" element={<CreateAccount/>}/>
       <Route exact path="/Login" element={<Login/>}/>
       <Route exact path="/UpcomingMeetings" element={<UpcomingMeetings/>}/>
+      <Route exact path="/PastMeetings" element={<PastMeetings/>}/>
       <Route exact path="/EditMeeting" element={<EditMeeting/>}/>
     </Routes>
   </BrowserRouter>

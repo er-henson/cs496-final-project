@@ -50,6 +50,7 @@ app.post('/updatemeeting', meetingController.updateMeeting);
 app.get('/allmeetings', meetingController.readAllMeetings);
 app.get('/upcomingmeetings', meetingController.readFutureMeetings);
 app.get('/meeting/:id', meetingController.readMeetingByID);
+app.get('/pastmeetings',meetingController.readPastMeetings)
 
 const server = app.listen(port, hostname, 
     function()

@@ -63,6 +63,9 @@ function Navbar()
                 <li className="nav-item">
                     <NavLink to="/UpcomingMeetings" className="fancy_link">Upcoming Meetings</NavLink>
                 </li>
+                <li className="nav-item">
+                    <NavLink to="/PastMeetings" className="fancy_link">Past Meetings</NavLink>
+                </li>
             </ul>
             
         </div>
