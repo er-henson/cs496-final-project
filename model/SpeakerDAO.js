@@ -34,6 +34,10 @@ exports.create = async function(newSpeaker)
 }
 exports.readAll = async function()
 {
-    let meetings = await speakerModel.find({}).lean();
-    return meetings;
+    let speakers = await speakerModel.find({}).lean();
+    return speakers;
+}
+exports.deleteAll = async function()
+{
+    await speakerModel.deleteMany();
 }

@@ -11,7 +11,7 @@ import CreateMeeting from './Pages/CreateMeeting';
 import Login from './Pages/Login';
 import EditMeeting from './Pages/EditMeeting'
 import PastMeetings from './Pages/PastMeetings'
-
+import Speakers from './Pages/Speakers'
 import './site_style.css';
 import Jumbotron from './MainPage/Jumbotron';
 import Navbar from './MainPage/Navbar';
@@ -33,6 +33,7 @@ root.render(
       <Route exact path="/Home" element={<App/>}/>
       <Route exact path="/CreateMeeting" element={<CreateMeeting/>}/>
       <Route exact path="/CreateAccount" element={<CreateAccount/>}/>
+      <Route exact path="/Speakers" element={<Speakers/>}/>
       <Route exact path="/Login" element={<Login/>}/>
       <Route exact path="/UpcomingMeetings" element={<UpcomingMeetings/>}/>
       <Route exact path="/PastMeetings" element={<PastMeetings/>}/>
