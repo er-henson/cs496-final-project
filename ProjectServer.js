@@ -15,7 +15,7 @@ const app = express();
 
 const userController = require('./controller/UserController'); // controller for user information
 const meetingController = require('./controller/MeetingController'); // controller for meeting/event information
-
+const speakerController = require('./controller/SpeakerController'); // controller for meeting/event information
 app.use( morgan('dev') );
 app.use( express.urlencoded({extended:true}) );
 app.use( express.json() );
@@ -51,6 +51,12 @@ app.get('/allmeetings', meetingController.readAllMeetings);
 app.get('/upcomingmeetings', meetingController.readFutureMeetings);
 app.get('/meeting/:id', meetingController.readMeetingByID);
 app.get('/pastmeetings',meetingController.readPastMeetings)
+
+// SpeakingController operations
+app.post('/savespeaker', speakerController.saveSpeaker);
+app.get('/allspeakers', speakerController.readAllSpeakers);
+
+
 
 const server = app.listen(port, hostname, 
     function()
