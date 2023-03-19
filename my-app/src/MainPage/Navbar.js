@@ -11,19 +11,19 @@ function Navbar()
     */
     useEffect(() => {
         console.log('Navbar calling useEffect now.');
-        axios.get('http://localhost:4000/getlogged')
+        axios.get('http://localhost:4000/getlogged', {withCredentials: true})
         .then((response) => {
             console.log(response.data);
             setUser(response.data);
         })
-    });
+    }, []);
     
     /*
         function to log the user out
     */
     function logout()
     {
-        axios.get('http://localhost:4000/logout')
+        axios.get('http://localhost:4000/logout', {withCredentials: true})
         .then((response) => {
             setUser(response.data);
         })
@@ -43,7 +43,7 @@ function Navbar()
                 </li>
                 
                 {/*check if the user is logged in. if they are, then change these buttons to 'logout'*/}
-                {user ? 
+                {user.username ? 
                 
                     <li className="nav-item">
                         <button onClick={logout} className="fancy_link">Logout</button>

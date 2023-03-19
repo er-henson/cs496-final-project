@@ -44,6 +44,14 @@ login as a user
 */
 exports.login = async function(request, response)
 {
+    /*
+    console.log('in the login function - request:');
+    console.log('SessionID:\n---\n');
+    console.log(request.sessionID);
+    console.log('Session:\n---\n');
+    console.log(request.session);
+    */
+    
     let email = request.body.email;
     let pw = passUtil.hashPassword(request.body.password);
     
@@ -51,10 +59,8 @@ exports.login = async function(request, response)
     
     if(user !== null) // successful login
     {
-        user.password = null; // set password to null for security
-        request.session.user = user;
         response.status(200);
-        console.log(request.session);
+        request.session.user = user;
         response.send(request.session.user);
     }
     else // incorrect login
@@ -70,12 +76,32 @@ get the logged-in user
 */
 exports.getLoggedUser = async function(request, response)
 {
+    /*
+    console.log('in the getLoggedUser function - request:');
+    console.log('SessionID:\n---\n');
+    console.log(request.sessionID);
+    console.log('Session:\n---\n');
+    console.log(request.session);
+    */
+    
+    if(request.session.user)
+    {
+        response.status(200);
+        response.send(request.session.user);
+    }
+    else
+    {
+        response.status(401);
+        response.send( {msg:'Unauthorized'});
+    }
+    /*
     console.log("current session status: ");
     console.log(request.session);
     
     response.status(200);
     response.send(request.session.user);
     response.end();
+    */
 }
 
 /*
@@ -84,6 +110,8 @@ log the user out of the session
 exports.logout = async function(request, response)
 {
     request.session.user = null;
+    // remove the sessionID from the database
+    
     response.status(200);
     response.send(null);
 }
