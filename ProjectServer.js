@@ -8,26 +8,42 @@ const express = require('express'); //import express
 const morgan = require('morgan'); //import morgan for logging
 const session = require('express-session');
 const cors = require('cors');
-const memorystore = require('memorystore')(session);
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 const app = express();
+const COOKIE_AGE = 1000 * 60 * 60 * 24; // 24 hours
 
+// for storing sessions in mongoDB
+const mongoDBstore = new MongoDBStore({
+    uri: process.env.TESTDB_URI,
+    collection: 'sessions'
+});
 
 const userController = require('./controller/UserController'); // controller for user information
 const meetingController = require('./controller/MeetingController'); // controller for meeting/event information
-const speakerController = require('./controller/SpeakerController'); // controller for meeting/event information
+const speakerController = require('./controller/SpeakerController'); // controller for speaker information
+
 app.use( morgan('dev') );
 app.use( express.urlencoded({extended:true}) );
 app.use( express.json() );
-app.use( cors());
+
+// cors options
+app.use( cors({
+    origin: 'http://localhost:3000',
+    methods: 'GET,POST',
+    credentials: true
+}));
 
 // session settings
 app.use(session({
     secret: 'some morally upsetting hypocrisy of uncountably infinite suffering',
-    cookie: {maxAge: 86400000, secure:false }, // = 1000*60*60*24 = 24Hours
-    store: new memorystore({ checkPeriod:86400000 }),
+    name: 'session-id', // name of the cookie, how it will be read from the client
+    cookie: {maxAge: COOKIE_AGE,
+        secure:false,
+        sameSite: false},
+    store: mongoDBstore,
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: false
 }));
 
 

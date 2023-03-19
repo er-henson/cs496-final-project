@@ -24,14 +24,13 @@ function Login()
             password: password
             
         };
-        console.log(user);
         
         // perform post action, submitting the username and password for verification
-        axios.post(baseURL+"dologin", user)
+        axios.post(baseURL+"dologin", user, {withCredentials:true})
         .then((response) => 
         {
-            // TODO - update frontend to change after logging in rather than using useEffect
-            axios.get(baseURL + "getlogged")
+            // test to see if the logged user is actually saved
+        axios.get(baseURL + "getlogged", {withCredentials:true} )
             .then((response) => 
             {
                 console.log("got logged user successfully:")
