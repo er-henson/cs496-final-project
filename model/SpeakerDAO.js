@@ -17,7 +17,7 @@ const speakerModel = mongoose.model('Speaker',speakerSchema);
 exports.create = async function(newSpeaker)
 {
     // search for potential duplicates first
-    let dupeEmail = await speakerModel.find( {name: newSpeaker.name} ).lean();
+    let dupeEmail = await speakerModel.find( {data: newSpeaker.data} ).lean();
     // if we find a user who already has the same email, return null
     if(dupeEmail.length > 0)
     {
@@ -40,4 +40,15 @@ exports.readAll = async function()
 exports.deleteAll = async function()
 {
     await speakerModel.deleteMany();
+}
+exports.updateSpeaker = async function(speakerData)
+{
+    // find the meeting by its ID
+    let editedSpeaker = await speakerModel.findOneAndUpdate( {_id: speakerData._id}, speakerData, {returnOriginal: false}).lean();
+    return editedSpeaker;
+}
+exports.readByID = async function(id)
+{
+    let speaker = await speakerModel.findById(id).lean();
+    return speaker;
 }

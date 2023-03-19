@@ -6,6 +6,7 @@ import axios from 'axios';
 import App from './App';
 
 import UpcomingMeetings from './Pages/UpcomingMeetings';
+import EditSpeaker from './Pages/EditSpeaker';
 import CreateAccount from './Pages/CreateAccount';
 import CreateMeeting from './Pages/CreateMeeting';
 import Login from './Pages/Login';
@@ -38,6 +39,7 @@ root.render(
       <Route exact path="/UpcomingMeetings" element={<UpcomingMeetings/>}/>
       <Route exact path="/PastMeetings" element={<PastMeetings/>}/>
       <Route exact path="/EditMeeting" element={<EditMeeting/>}/>
+      <Route exact path="/EditSpeaker" element={<EditSpeaker/>}/>
     </Routes>
   </BrowserRouter>
   </React.StrictMode>
