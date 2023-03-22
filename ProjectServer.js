@@ -71,7 +71,8 @@ app.get('/pastmeetings',meetingController.readPastMeetings)
 // SpeakingController operations
 app.post('/savespeaker', speakerController.saveSpeaker);
 app.get('/allspeakers', speakerController.readAllSpeakers);
-
+app.post('/EditSpeaker', speakerController.updateSpeaker);
+app.get('/speaker/:id', speakerController.readSpeakerByID);
 
 
 const server = app.listen(port, hostname, 
