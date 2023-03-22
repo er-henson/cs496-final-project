@@ -25,8 +25,8 @@ test('Create an account', async function()
     req.body = testUser;
     await userController.saveUser(req, res);
     
-    expect(res.status).toHaveBeenCalledWith(300);
-    expect(res.redirect).toHaveBeenCalledWith('/Login');
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.end).toHaveBeenCalled();
 });
 
 test('Create an account with an existing user email', async function()
@@ -59,7 +59,7 @@ test('Login with correct credentials', async function()
     
     await userController.login(req, res);
     
-    expect(res.status).toHaveBeenCalledWith(300);
+    expect(res.status).toHaveBeenCalledWith(200);
     expect(res.send).toHaveBeenCalledWith({
         _id:'abc',
         username: 'phil',
@@ -91,4 +91,72 @@ test('Login with incorrect credentials', async function()
     expect(res.status).toHaveBeenCalledWith(401);
     expect(res.send).toHaveBeenCalledWith( {msg:'Invalid credentials'} );
     expect(res.end).toHaveBeenCalled();
+});
+
+test('Get the logged-in user while logged in', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.session.user = {
+        _id:'abc',
+        username: 'phil',
+        email: 'phil@somewhere',
+        password: null,
+        admin: 0
+    };
+    
+    await userController.getLoggedUser(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.send).toHaveBeenCalledWith({
+        _id:'abc',
+        username: 'phil',
+        email: 'phil@somewhere',
+        password: null,
+        admin: 0
+    });
+});
+
+test('Get the logged-in user while not logged in', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.session.user = null;
+    
+    await userController.getLoggedUser(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.send).toHaveBeenCalledWith({msg: 'Unauthorized'});
+});
+
+test('Logout while logged in', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.session.user = {
+        _id:'abc',
+        username: 'phil',
+        email: 'phil@somewhere',
+        password: null,
+        admin: 0
+    };
+    
+    await userController.logout(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(req.session.user).toBe(null);
+    expect(res.send).toHaveBeenCalledWith(null);
+});
+
+test('Logout while not logged in', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.session.user = null;
+    
+    await userController.logout(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(409);
+    expect(req.session.user).toBe(null);
+    expect(res.send).toHaveBeenCalledWith(null);
 });

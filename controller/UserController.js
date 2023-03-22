@@ -59,6 +59,7 @@ exports.login = async function(request, response)
     
     if(user !== null) // successful login
     {
+        user.password = null;
         response.status(200);
         request.session.user = user;
         response.send(request.session.user);
@@ -109,9 +110,15 @@ log the user out of the session
 */
 exports.logout = async function(request, response)
 {
-    request.session.user = null;
-    // remove the sessionID from the database
+    if(request.session.user)
+    {
+        request.session.user = null;
+        response.status(200);
+    }
+    else
+    {
+        response.status(409);
+    }
     
-    response.status(200);
     response.send(null);
 }
