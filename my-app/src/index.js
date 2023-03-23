@@ -4,7 +4,7 @@ import {BrowserRouter,Routes,Route,NavLink} from "react-router-dom";
 import axios from 'axios';
 
 import App from './App';
-
+import CreateSpeaker from './Pages/CreateSpeaker';
 import UpcomingMeetings from './Pages/UpcomingMeetings';
 import EditSpeaker from './Pages/EditSpeaker';
 import CreateAccount from './Pages/CreateAccount';
@@ -34,6 +34,7 @@ root.render(
       <Route exact path="/Home" element={<App/>}/>
       <Route exact path="/CreateMeeting" element={<CreateMeeting/>}/>
       <Route exact path="/CreateAccount" element={<CreateAccount/>}/>
+      <Route exact path="/CreateSpeaker" element={<CreateSpeaker/>}/>
       <Route exact path="/Speakers" element={<Speakers/>}/>
       <Route exact path="/Login" element={<Login/>}/>
       <Route exact path="/UpcomingMeetings" element={<UpcomingMeetings/>}/>
