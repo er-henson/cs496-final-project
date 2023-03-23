@@ -88,7 +88,76 @@ describe('MeetingController', () => {
       expect(response.send).toHaveBeenCalledWith([newMeeting]);
     });
   });
+
+
+  describe('deleteMeeting', () => {
+    it('should call dao.deleteMeeting with the meeting ID', async () => {
+      const meetingID = '6418e67eb4803b6450bba029';
+      const mockDeleteMeeting = jest.fn();
+      mockDao.deleteMeeting = mockDeleteMeeting;
   
-});
+      await MeetingController.deleteMeeting({ params: { id: meetingID } }, response);
+  
+      expect(mockDeleteMeeting).toHaveBeenCalledTimes(1);
+      expect(mockDeleteMeeting).toHaveBeenCalledWith(meetingID);
+    });
+  
+    it('should send a 204 status code and a response body with id on successful deletion', async () => {
+      const meetingID = '6418e67eb4803b6450bba029';
+      const mockDeleteMeeting = jest.fn();
+      mockDao.deleteMeeting = mockDeleteMeeting;
+  
+      await MeetingController.deleteMeeting({ params: { id: meetingID } }, response);
+  
+      expect(response.status).toHaveBeenCalledWith(204);
+      expect(response.send).toHaveBeenCalledWith(`Meeting with id ${meetingID} has been deleted.`);
+    });
+  
+    it('should send a 500 status code and an error message on deletion failure', async () => {
+      const meetingID = '6418e67eb4803b6450bba029';
+      const errorMessage = 'Failed to delete meeting';
+      const mockDeleteMeeting = jest.fn().mockRejectedValue(new Error(errorMessage));
+      mockDao.deleteMeeting = mockDeleteMeeting;
+  
+      await MeetingController.deleteMeeting({ params: { id: meetingID } }, response);
+  
+      expect(response.status).toHaveBeenCalledWith(500);
+      expect(response.send).toHaveBeenCalledWith({ error: errorMessage });
+    });
+    it('should call dao.delete with the meeting id', async () => {
+        const meetingId = 1;
+        request.params = { id: meetingId };
+        
+        await MeetingController.deleteMeeting(request, response);
+    
+        expect(mockDao.delete).toHaveBeenCalledTimes(1);
+        expect(mockDao.delete).toHaveBeenCalledWith(meetingId);
+      });
+    
+      it('should send a success message in the response', async () => {
+        const meetingId = 1;
+        request.params = { id: meetingId };
+        mockDao.delete.mockReturnValue(1);
+    
+        await MeetingController.deleteMeeting(request, response);
+    
+        expect(response.status).toHaveBeenCalledWith(200);
+        expect(response.send).toHaveBeenCalledWith(`Meeting with id ${meetingId} has been deleted.`);
+      });
+      
+      it('should return a 404 error if the meeting is not found', async () => {
+        const meetingId = 1;
+        request.params = { id: meetingId };
+        mockDao.delete.mockReturnValue(0);
+    
+        await MeetingController.deleteMeeting(request, response);
+    
+        expect(response.status).toHaveBeenCalledWith(404);
+        expect(response.send).toHaveBeenCalledWith(`Meeting with id ${meetingId} not found.`);
+      });
+    });
+    
+  });
+
 
 

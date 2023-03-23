@@ -4,13 +4,16 @@ const dbcon = require('./model/DBConnection');
 dbcon.connect('test'); // add 'test' in parenthises to connect to the test DB. remove otherwise
 
 // necessary imports
-const express = require('express'); //import express
+const express = require('express');
 const morgan = require('morgan'); //import morgan for logging
 const session = require('express-session');
 const cors = require('cors');
 const MongoDBStore = require('connect-mongodb-session')(session);
 
 const app = express();
+app.use(cors({
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+  }));
 const COOKIE_AGE = 1000 * 60 * 60 * 24; // 24 hours
 
 // for storing sessions in mongoDB
@@ -63,6 +66,7 @@ app.get('/logout', userController.logout);
 // MeetingController operations
 app.post('/savemeeting', meetingController.saveMeeting);
 app.post('/updatemeeting', meetingController.updateMeeting);
+app.delete('/meeting/:id', meetingController.deleteMeeting);
 app.get('/allmeetings', meetingController.readAllMeetings);
 app.get('/upcomingmeetings', meetingController.readFutureMeetings);
 app.get('/meeting/:id', meetingController.readMeetingByID);

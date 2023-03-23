@@ -116,9 +116,20 @@ exports.updateMeeting = async function(request, response)
 
 /*
 POST request
-delete a meeting
+delete a meeting by its ID
 */
-exports.deleteMeeting = async function(request, response)
-{
-    
+
+exports.deleteMeeting = async function(request, response) {
+    const meetingID = request.params.id;
+
+    try {
+        // Find the meeting by its ID and delete it
+        await dao.deleteMeeting(meetingID);
+        
+        response.status(204);
+        response.send(`Meeting with id ${meetingID} has been deleted.`);
+    } catch (error) {
+        response.status(500);
+        response.send({ error: error.message });
+    }
 }

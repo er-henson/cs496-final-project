@@ -86,22 +86,22 @@ function EditMeeting()
           {/*field for setting the speaker*/}
           <div className="form-group">
             <label htmlFor="speaker">Speaker</label>
-            <input type="text" className="form-control" id="speaker" onChange={(e) => setSpeaker(e.target.value)} />
+            <input type="text" className="form-control" id="speaker" value={speaker} onChange={(e) => setSpeaker(e.target.value)} />
           </div>
           {/*field for setting the topic*/}
           <div className="form-group">
             <label htmlFor="topic">Topic</label>
-            <input type="text" className="form-control" id="topic" onChange={(e) => setTopic(e.target.value)} />
+            <input type="text" className="form-control" value={topic} id="topic" onChange={(e) => setTopic(e.target.value)} />
           </div>
           {/*field for setting the location*/}
           <div className="form-group">
             <label htmlFor="location">Location</label>
-            <input type="text" className="form-control" id="location" onChange={(e) => setLocation(e.target.value)} />
+            <input type="text" className="form-control" value={location} id="location" onChange={(e) => setLocation(e.target.value)} />
           </div>
           {/*field for setting the description*/}
           <div className="form-group">
             <label htmlFor="description">Description</label>
-            <textarea className="form-control" id="description" onChange={(e) => setContent(e.target.value)} />
+            <textarea className="form-control" id="description"  value={content} onChange={(e) => setContent(e.target.value)} />
           </div>
           
           <button type="submit" className="btn btn-primary">Submit</button>

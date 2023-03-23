@@ -43,6 +43,8 @@ exports.create = async function(meeting)
     await mongoMeeting.save();
     return await exports.readByID(mongoMeeting._id);
 }
+
+
 /*
  function to read all saved meetings from the database
 */
@@ -81,6 +83,12 @@ exports.getUpcomingMeetings = async function()
     let futureMeetings = await meetingModel.find({date: {$gt: currentDate}}).lean();
     return futureMeetings;
 }
+exports.deleteMeeting = async function(meetingID) {
+    // delete the meeting by its ID
+    await meetingModel.deleteOne({ _id: meetingID }).lean();
+  }
+
+
 
 /*
 function to query all meetings created before the current date
