@@ -14,13 +14,30 @@ save a new meeting to the DAO
 exports.saveMeeting = async function(request, response)
 {
     // assumes the request body gives all variable values individually
+    /*
+        here is how the controller handles the image file. note that the
+        request now has a new attribute, 'request.file.' you can `console.log`
+        the `request.file` to see all of the fields. the important one is
+        `request.file.buffer,` which contains the actual data for the image.
+        
+        note that trying to console log `request.file.buffer` will print out
+        a Looooooooong string of Hex digits.
+        
+        check the MeetingDAO.js to see how mongoose works with this to store it
+        on the database
+    */
     let newMeeting = 
     {
         date: request.body.date,
         speaker: request.body.speaker,
         topic: request.body.topic,
         location: request.body.location,
-        content: request.body.content
+        content: request.body.content,
+        img: {
+            data: request.file.buffer,
+            title:request.file.originalname,
+            contentType:'image/jpeg'
+        }
     };
     
     let savedMeeting = await dao.create(newMeeting);
@@ -32,11 +49,12 @@ exports.saveMeeting = async function(request, response)
 /*
 GET request
 read all meetings currently saved in the database
+
+get requests do not change with images, thankfully.
 */
 exports.readAllMeetings = async function(request, response)
 {
     let allMeetings = await dao.readAll();
-    console.log(allMeetings);
     response.status(200);
     response.send(allMeetings);
 
@@ -60,7 +78,6 @@ read all meetings that will occur in the future
 exports.readFutureMeetings = async function(request, response)
 {
     let futureMeetings = await dao.getUpcomingMeetings();
-    console.log(futureMeetings);
     response.status(200);
     response.send(futureMeetings);
 }

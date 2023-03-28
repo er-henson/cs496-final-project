@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import ImageUpload from '../Components/ImageUpload';
 
 /*
 function setCurrentDate(minute,hour,day,month,year){
@@ -32,14 +33,35 @@ function CreateMeeting() {
   const [topic, setTopic] = useState('');
   const [location, setLocation] = useState('');
   const [content, setContent] = useState('');
+  const [image, setImage] = useState();
+  
   let navigate = useNavigate();
+  
+  useEffect(() => {console.log('image on meeting create page is: ', image)}, [image]);
   
   const handleSubmit = async (e) => {
     // stop the page from reloading
     e.preventDefault();
     
+    //let newMeeting = new FormData();
+    //console.log(date + " " + time);
+    
+    
+    let combinedDateTime = new Date(Date.parse(date + " " + time))
+    
+    let newMeeting = new FormData();
+    newMeeting.append('date', combinedDateTime);
+    newMeeting.append('speaker', speaker);
+    newMeeting.append('topic', topic);
+    newMeeting.append('location', location);
+    newMeeting.append('content', content);
+    newMeeting.append('meetingImage', image);
+    
+    console.log(newMeeting);
+    
+    
     // send the meeting to the backend
-    axios.post('http://localhost:4000/savemeeting', {date,time,speaker,topic,location,content})
+    axios.post('http://localhost:4000/savemeeting', newMeeting, {withValidation: true})
     .then((response) =>
     {
         console.log(response.data);
@@ -74,7 +96,7 @@ function CreateMeeting() {
           </header>
         </div>
         
-        <form onSubmit={handleSubmit}>
+        <form encType="multipart/form-data" onSubmit={handleSubmit}>
           {/*field for setting the date*/}
           <div className="form-group">
             <label htmlFor="meetingDate">Date</label>
@@ -104,6 +126,11 @@ function CreateMeeting() {
           <div className="form-group">
             <label htmlFor="description">Description</label>
             <textarea className="form-control" id="description" onChange={(e) => setContent(e.target.value)} />
+          </div>
+          
+          {/*field for sending an image*/}
+          <div className ="form-group">
+          <ImageUpload imageChange={setImage}/>
           </div>
           
           <button type="submit" className="btn btn-primary">Submit</button>

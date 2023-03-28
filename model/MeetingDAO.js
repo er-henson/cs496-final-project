@@ -14,13 +14,26 @@ important data fields are:
     Image Content
     Rating
 */
+/*
+    the schema's been changed to accept an image buffer.
+    the 'data' field is the most important, as that is the part
+    that actually has the information for the image. its type
+    is a `Buffer,` which is a really long string of Hex digits
+    representing a file. this is really the only change in the 
+    DAO.
+*/
 const meetingSchema = new mongoose.Schema(
 {
     date:{ type:Date, default:Date.now },
     speaker: String,
     topic: String,
     location: String,
-    content: String
+    content: String,
+    img: {
+        data: Buffer,
+        title: String,
+        contentType: String
+    }
 });
 
 
@@ -34,6 +47,7 @@ const meetingModel = mongoose.model('Meeting',meetingSchema);
     topic - String
     location - String
     content - String
+    image - Buffer
 
 */
 

@@ -34,7 +34,7 @@ function UpcomingMeetings()
     
     return(
     <div className="d-flex justify-content-center align-items-center">
-    <div className="col-12 col-lg-6">
+    <div className="col-12 col-lg-8">
     
     {/*page header*/}
     <div style={{ backgroundColor: '#B59EC1' }}>
@@ -49,16 +49,31 @@ function UpcomingMeetings()
     {meetings && meetings.map ? // the 'if' condition. if 'meetings' and 'meetings.map' are not null,...
         <ul>
         {meetings.map((meeting) => (
-            <li className="page_li">
-                {/* link to the page to edit a particular meeting. links with the meeting ID so that page can use a GET request.*/}
-                <button onClick={()=>{toEditPage(meeting._id)}}> Edit </button>
-                <button onClick={()=>{handleDelete(meeting._id)}}> Delete </button>
-                {/* layout for the meeting itself. */}
-                <p><span style={{fontWeight: 700}}>Topic:</span> {meeting.topic}</p>
-                <p><span style={{fontWeight: 700}}>Speaker:</span> {meeting.speaker}</p>
-                <p style={{fontWeight: 700}}>Description:</p>
-                <p>{meeting.content}</p>
-            </li>
+            <div>
+                <li className="page_li">
+                    <div className='row'>
+                        <div className='col-lg-11'>
+                            {/* buttons for editing or deleting a meeting.
+                                TODO - make it so these only appear to logged-in admins */}
+                            <button onClick={()=>{toEditPage(meeting._id)}}> Edit </button>
+                            <button onClick={()=>{handleDelete(meeting._id)}}> Delete </button>
+                            {/* layout for the meeting itself. */}
+                            <p><span style={{fontWeight: 700}}>Date:</span> {new Date(Date.parse(meeting.date)).toDateString()}</p>
+                            <p><span style={{fontWeight: 700}}>Topic:</span> {meeting.topic}</p>
+                            <p><span style={{fontWeight: 700}}>Speaker:</span> {meeting.speaker}</p>
+                            <p style={{fontWeight: 700}}>Description:</p>
+                            <p>{meeting.content}</p>
+                        </div>
+                        <div className='col-lg-1'>
+                            {/* display for the image on the frontend. the main piece is the `meeting.img.data,` which
+                                is the buffer data from the DAO. the incantation `data:image/jpeg;base64,${x}` is how
+                                buffer data is actually interpreted and displayed on the page. i set the image size 
+                                to be really small so that it doesn't take up a huge portion of the page.*/}
+                            <img alt='no image'src={`data:image/jpeg;base64,${meeting.img.data}`} style={{height:150}}/>
+                        </div>
+                    </div>
+                </li>
+            </div>
         ))}
         </ul>
         :
