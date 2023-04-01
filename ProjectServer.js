@@ -77,7 +77,7 @@ const upload = multer({
 const userController = require('./controller/UserController'); // controller for user information
 const meetingController = require('./controller/MeetingController'); // controller for meeting/event information
 const speakerController = require('./controller/SpeakerController'); // controller for speaker information
-
+const newsController = require('./controller/NewsController'); // controller for news updates and information
 
 
 // setting up the server with important modules
@@ -127,13 +127,13 @@ app.get('/logout', userController.logout);
     and it will be very hard to debug.
 */
 app.post('/savemeeting', upload.single('meetingImage'), meetingController.saveMeeting);
-
 app.post('/updatemeeting', meetingController.updateMeeting);
 app.delete('/meeting/:id', meetingController.deleteMeeting);
 app.get('/allmeetings', meetingController.readAllMeetings);
 app.get('/upcomingmeetings', meetingController.readFutureMeetings);
 app.get('/meeting/:id', meetingController.readMeetingByID);
 app.get('/pastmeetings',meetingController.readPastMeetings)
+
 
 // SpeakingController operations
 app.post('/savespeaker', speakerController.saveSpeaker);
@@ -142,20 +142,9 @@ app.post('/EditSpeaker', speakerController.updateSpeaker);
 app.get('/speaker/:id', speakerController.readSpeakerByID);
 
 
+// NewsController operations
+app.post('/savenewspost', upload.array('newsImages', 10), newsController.saveNewsPost);
 
-
-/*
-    // old function i used when trying to implement multer. you can ignore it.
-
-    async function(request, response){
-    console.log('axios post data:\n', request.body);
-    console.log('hopefully the image file:\n', request.file);
-    
-    console.log('entire request field:\n',request);
-    
-    response.end('file is uploaded');
-});
-*/
 
 const server = app.listen(port, hostname, 
     function()

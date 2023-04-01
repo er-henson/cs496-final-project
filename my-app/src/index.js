@@ -7,8 +7,12 @@ import App from './App';
 import CreateSpeaker from './Pages/CreateSpeaker';
 import UpcomingMeetings from './Pages/UpcomingMeetings';
 import EditSpeaker from './Pages/EditSpeaker';
+
 import CreateAccount from './Pages/CreateAccount';
 import CreateMeeting from './Pages/CreateMeeting';
+import CreateNewsPost from './Pages/CreateNewsPost';
+
+
 import Login from './Pages/Login';
 import EditMeeting from './Pages/EditMeeting'
 import PastMeetings from './Pages/PastMeetings'
@@ -34,6 +38,7 @@ root.render(
       <Route exact path="/CreateMeeting" element={<CreateMeeting/>}/>
       <Route exact path="/CreateAccount" element={<CreateAccount/>}/>
       <Route exact path="/CreateSpeaker" element={<CreateSpeaker/>}/>
+      <Route exact path="/CreateNewsPost" element={<CreateNewsPost/>}/>
       <Route exact path="/Speakers" element={<Speakers/>}/>
       <Route exact path="/Login" element={<Login/>}/>
       <Route exact path="/UpcomingMeetings" element={<UpcomingMeetings/>}/>

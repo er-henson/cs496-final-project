@@ -6,7 +6,10 @@ module.exports =
         const req = {};
         req.body = jest.fn().mockReturnValue(req);
         req.session = jest.fn().mockReturnValue(req);
-        req.params = jest.fn().mockReturnValue(req)
+        req.params = jest.fn().mockReturnValue(req);
+        req.file = jest.fn().mockReturnValue(req);
+        req.files = jest.fn().mockReturnValue(req);
+        req.headers = jest.fn().mockReturnValue(req);
         return req;
     },
 
