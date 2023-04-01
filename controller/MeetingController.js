@@ -26,6 +26,7 @@ exports.saveMeeting = async function(request, response)
         check the MeetingDAO.js to see how mongoose works with this to store it
         on the database
     */
+    
     let newMeeting = 
     {
         date: request.body.date,
@@ -33,12 +34,18 @@ exports.saveMeeting = async function(request, response)
         topic: request.body.topic,
         location: request.body.location,
         content: request.body.content,
-        img: {
+
+    };
+    
+    if(request.file)
+    {
+        let fileImage = {
             data: request.file.buffer,
             title:request.file.originalname,
             contentType:'image/jpeg'
         }
-    };
+        newMeeting.img = fileImage;
+    }
     
     let savedMeeting = await dao.create(newMeeting);
     
