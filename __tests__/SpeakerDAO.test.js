@@ -12,7 +12,7 @@ afterAll(async function(){
 
 const mongoose = require('mongoose');
 const assert = require('assert');
-const { create, readAll, deleteAll, updateSpeaker } = require('../model/SpeakerDAO');
+const { create, readAll, deleteAll, updateSpeaker,deleteSpeakerByID } = require('../model/SpeakerDAO');
 
 // Set up a connection to a test database
 
@@ -153,7 +153,31 @@ describe('updateSpeaker function', function() {
       assert.strictEqual(editedSpeaker, null);
     });
   });
-  
+  describe('deleteSpeakerByID function', function() {
+    it('should delete a speaker by ID', async function() {
+      // Create a new speaker
+      const newSpeaker = {
+        name: 'Test Speaker',
+        phone: '123-456-7890',
+        email: 'test@example.com',
+        mailing_address: '123 Main St',
+        specialty: 'Testing'
+      };
+      const createdSpeaker = await create(newSpeaker);
+      // Delete the speaker by ID
+      await deleteSpeakerByID(createdSpeaker._id);
+      // Verify that the speaker has been deleted
+      const allSpeakers = await readAll();
+      assert.deepStrictEqual(allSpeakers, []);
+    });
+    it('should return null if no speaker is found with the given ID', async function() {
+      const deletedSpeaker = await deleteSpeakerByID(mongoose.Types.ObjectId());
+      assert.strictEqual(deletedSpeaker, null);
+    });
+  });
+
+
+
 });
 
 
