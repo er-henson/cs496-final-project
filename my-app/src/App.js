@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import MeetingSection from './MainPage/MeetingSection'
+import UpcomingMeetings from './Pages/UpcomingMeetings'
 import NewsSection from './MainPage/NewsSection'
 import Footer from './Components/Footer'
 function App() {
@@ -8,8 +8,13 @@ function App() {
     <>
       <div className="container" >
         <div className="row">
-           <NewsSection/>
-          <MeetingSection/>
+            <div className="col-lg-6">
+                <NewsSection/>
+            </div>
+            <div className="col-lg-6">
+                <UpcomingMeetings/>
+            </div>
+          
         </div>
         <Footer/>
       </div>

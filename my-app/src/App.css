@@ -10,6 +10,13 @@ a.fancy_link {
   transition: color 0.3s;
 }
 
+a.fancy_page_link {
+  text-decoration: none;
+  color: #9975B2;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
 a.fancy_link:hover {
   color: #B59EC1;
 }

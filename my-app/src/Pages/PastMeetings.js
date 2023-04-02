@@ -24,10 +24,10 @@ function PastMeetings()
     
     return(
     <div className="d-flex justify-content-center align-items-center">
-    <div className="col-12 col-lg-6">
+    <div className="col-12">
     
     {/*page header*/}
-    <div style={{ backgroundColor: '#B59EC1' }}>
+    <div style={{ backgroundColor: '#B71429' }}>
       <header className="mt-2 p-4 text-white text-center rounded">
         <h1 style={{ fontWeight: 700, color: '#ffffff' }}> Past meetings </h1>
       </header>

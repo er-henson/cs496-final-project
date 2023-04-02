@@ -6,6 +6,7 @@ import EditSpeaker from './EditSpeaker';
 function Speakers() {
   const navigate = useNavigate();
   const [speakers, setSpeakers] = useState([]);
+  const [user, setUser] = useState(null);
 
   const toEditPage = (speakerID) => {
     navigate('/EditSpeaker', { state: { id: speakerID } });
@@ -15,25 +16,39 @@ function Speakers() {
     axios.get('http://localhost:4000/allspeakers').then((response) => {
       setSpeakers(response.data);
     });
+    
+    axios.get('http://localhost:4000/getlogged', {withCredentials: true})
+    .then((response) => {
+        console.log(response.data);
+        setUser(response.data);
+    })
+    .catch((error) => {
+        console.log('user not logged in');
+    })
   }, []);
 
   return (
     <div className="d-flex justify-content-center align-items-center">
-      <div className="col-12 col-lg-6">
+      <div className="col-12">
         {/* page header */}
-        <div style={{ backgroundColor: '#B59EC1' }}>
+        <div style={{ backgroundColor: '#FFA060' }}>
           <header className="mt-2 p-4 text-white text-center rounded">
             <h1 style={{ fontWeight: 700, color: '#ffffff' }}>Speakers</h1>
           </header>
         </div>
-
+        
+        <div className="col-12 col-lg-8">
         {/* statement that checks for speakers. If they're there, display them. If not, show that there are no speakers */}
         {speakers && speakers.length > 0 ? (
           <ul>
             {speakers.map((speaker) => (
               <li className="page_li" key={speaker._id}>
                 {/* link to the page to edit a particular speaker. links with the speaker ID so that page can use a GET request.*/}
-                <button onClick={() => toEditPage(speaker._id)}>Edit</button>
+                {user && user.admin === 1 ?
+                    <button className="btn" style={{backgroundColor:'#FFA060'}} onClick={() => toEditPage(speaker._id)}>Edit</button>
+                :
+                    <></>
+                }
 
                 {/* layout for the speaker itself. */}
                 <p>
@@ -50,13 +65,14 @@ function Speakers() {
                 </p>
                 <p>
                   <span style={{ fontWeight: 700 }}>Specialty:</span> {speaker.specialty}
-                  </p>
+                </p>
           </li>
         ))}
       </ul>
     ) : (
       <h1>No speakers found</h1>
     )}
+    </div>
   </div>
 </div>
 );

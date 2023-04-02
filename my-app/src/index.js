@@ -16,7 +16,9 @@ import CreateNewsPost from './Pages/CreateNewsPost';
 import Login from './Pages/Login';
 import EditMeeting from './Pages/EditMeeting'
 import PastMeetings from './Pages/PastMeetings'
+import NewsPage from './Pages/NewsPage'
 import Speakers from './Pages/Speakers'
+import CreationPage from './Pages/CreationPage'
 import './site_style.css';
 import Jumbotron from './MainPage/Jumbotron';
 import Navbar from './MainPage/Navbar';
@@ -43,8 +45,10 @@ root.render(
       <Route exact path="/Login" element={<Login/>}/>
       <Route exact path="/UpcomingMeetings" element={<UpcomingMeetings/>}/>
       <Route exact path="/PastMeetings" element={<PastMeetings/>}/>
+      <Route exact path="/NewsPage" element={<NewsPage/>}/>
       <Route exact path="/EditMeeting" element={<EditMeeting/>}/>
       <Route exact path="/EditSpeaker" element={<EditSpeaker/>}/>
+      <Route exact path="/CreationPage" element={<CreationPage/>}/>
     </Routes>
   </BrowserRouter>
   </React.StrictMode>

@@ -70,7 +70,7 @@ function CreateAccount()
             <label className="col-form-label col-12 col-md-1" htmlFor="txt_pass"> Password: </label>
               <input 
                 value={password}
-                onChange={ e => setPassword(e.target.value)}className="form-control" name="password" id="txt_pass" minLength="6" required />
+                onChange={ e => setPassword(e.target.value)}className="form-control" name="password" type="password" id="txt_pass" minLength="6" required />
             <br/>
             <button type="submit" className="btn btn-primary" >Submit</button>
         </form>

@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import '../App.css'
 function Navbar()
 {
-    const [user, setUser] = React.useState({});
+    const [user, setUser] = React.useState(null);
     
     /*
         changing the navbar when a user logs in.
@@ -16,6 +16,9 @@ function Navbar()
             console.log(response.data);
             setUser(response.data);
         })
+        .catch((error) => {
+            console.log('user not logged in');
+        })
     }, []);
     
     /*
@@ -25,7 +28,7 @@ function Navbar()
     {
         axios.get('http://localhost:4000/logout', {withCredentials: true})
         .then((response) => {
-            setUser(response.data);
+            setUser(null);
         })
     }
     
@@ -42,13 +45,34 @@ function Navbar()
                     <NavLink to="/" className="fancy_link">Home</NavLink>
                 </li>
                 
-                {/*check if the user is logged in. if they are, then change these buttons to 'logout'*/}
-                {user.username ? 
+                <li className="nav-item">
+                    <NavLink to="/UpcomingMeetings" className="fancy_link">Upcoming Meetings</NavLink>
+                </li>
+                <li className="nav-item">
+                    <NavLink to="/PastMeetings" className="fancy_link">Past Meetings</NavLink>
+                </li>
+                <li className="nav-item">
+                    <NavLink to="/Speakers" className="fancy_link">Speakers</NavLink>
+                </li>
+                <li className="nav-item">
+                    <NavLink to="/NewsPage" className="fancy_link">News & Events</NavLink>
+                </li>
                 
+                
+                                {/*check if the user is logged in. if they are, then change these buttons to 'logout'*/}
+                {user && user.username ? 
+                <>
                     <li className="nav-item">
-                        <button onClick={logout} className="fancy_link">Logout</button>
+                        <NavLink onClick={logout} className="fancy_link">Logout</NavLink>
                     </li>
-                
+                    {user.admin === 1 ?
+                        <li className="nav-item">
+                            <NavLink to="/CreationPage" className="fancy_link">Manage Site</NavLink>
+                        </li>
+                        :
+                        <></>
+                    }
+                </>
                 : // if the user is not logged in, render the 'create account' and 'login' buttons
                 <>
                     <li className="nav-item">
@@ -60,15 +84,6 @@ function Navbar()
                     </li>
                 </>
                 }
-                <li className="nav-item">
-                    <NavLink to="/UpcomingMeetings" className="fancy_link">Upcoming Meetings</NavLink>
-                </li>
-                <li className="nav-item">
-                    <NavLink to="/Speakers" className="fancy_link">Speakers</NavLink>
-                </li>
-                <li className="nav-item">
-                    <NavLink to="/PastMeetings" className="fancy_link">Past Meetings</NavLink>
-                </li>
             </ul>
             
         </div>
