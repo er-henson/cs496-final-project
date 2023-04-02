@@ -28,6 +28,20 @@ function NewsPage()
         
     }, []);
     
+    const toEditPage = (postID) => {
+        navigate('/EditNewsPost', {state:{id:postID}});
+    }
+    
+    const handleDelete = (postID) => {
+        axios.post(`http://localhost:4000/deletenews/${postID}`)
+        .then(() => {
+            const updatedNews = news.filter(newsPost => newsPost._id !== postID);
+            setNews(updatedNews);
+        })
+        .catch()
+    }
+
+    
     return(
     <div className="d-flex justify-content-center align-items-center">
         <div className="col-12">
@@ -66,9 +80,11 @@ function NewsPage()
                         </div>
                         {/* check to see if there are images included with this news post. if so, display them. */
                         newsPost.images && newsPost.images.map ?
-                            <div className='col-lg-1'>
+                            <div>
                             {newsPost.images.map((image) => (
-                                <img alt='no image'src={`data:image/jpeg;base64,${image.data}`} style={{height:150}}/>
+                                <span>
+                                    <img alt='no image'src={`data:image/jpeg;base64,${image.data}`} style={{height:150}}/>
+                                </span>
                             ))}
                             </div>
                         :

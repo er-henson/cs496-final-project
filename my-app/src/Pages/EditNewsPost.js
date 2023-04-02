@@ -11,20 +11,25 @@ function EditNewsPost(){
     const loc = useLocation();
     const navigate = useNavigate();
     
-    let meetingID = loc.state.id;
+    let postID = loc.state.id;
     
     const addImage = function(image){
         setImages(imgs => [...imgs, image]);
         console.log('image has this many images in it:\n', images.length);
     }
     
+    /*
+    const removeImage = function(image){
+        setImages({images.filter(image)});
+    }
+    */
     
     /*
         set default values to what is retrieved from the GET request
     */
     useEffect(() => {
         
-        axios.get("http://localhost:4000/news/" + meetingID)
+        axios.get("http://localhost:4000/news/" + postID)
         .then((response) => {
             setTitle(response.data.title);
             setDescription(response.data.description);

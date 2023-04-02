@@ -19,6 +19,7 @@ import PastMeetings from './Pages/PastMeetings'
 import NewsPage from './Pages/NewsPage'
 import Speakers from './Pages/Speakers'
 import CreationPage from './Pages/CreationPage'
+import MultiImageUpload from './Components/MultiImageUpload'
 import './site_style.css';
 import Jumbotron from './MainPage/Jumbotron';
 import Navbar from './MainPage/Navbar';
@@ -49,6 +50,7 @@ root.render(
       <Route exact path="/EditMeeting" element={<EditMeeting/>}/>
       <Route exact path="/EditSpeaker" element={<EditSpeaker/>}/>
       <Route exact path="/CreationPage" element={<CreationPage/>}/>
+      <Route exact path="/MultiImageUpload" element={<MultiImageUpload imageChange={console.log}/>}/>
     </Routes>
   </BrowserRouter>
   </React.StrictMode>

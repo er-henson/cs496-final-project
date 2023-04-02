@@ -23,6 +23,9 @@ function MultiImageUpload(props){
             //console.log("image is: ", image);
         }
     };
+    
+    /* function to remove an image */
+    
     useEffect(()=>{}, [images])
     
     
