@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import ImageUpload from '../Components/ImageUpload';
+import MultiImageUpload from '../Components/MultiImageUpload';
 
 function CreateNewsPost() {
     const [title, setTitle] = useState('');
@@ -82,7 +82,7 @@ function CreateNewsPost() {
           
           {/*field for sending an image*/}
           <div className ="form-group">
-            <ImageUpload imageChange={addImage}/>
+            <MultiImageUpload imageChange={addImage}/>
           </div>
           
           <button type="submit" className="btn btn-primary">Submit</button>

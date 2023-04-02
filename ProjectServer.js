@@ -12,15 +12,6 @@ const MongoDBStore = require('connect-mongodb-session')(session); // for session
 const multer = require('multer'); // for image/file uploads
 
 const app = express();
-/*
-
-app.use(cors({
-    origin: 'http://localhost:3000',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
-  }));
-  
-*/
 
 // cors options
 app.use( cors({
@@ -127,7 +118,7 @@ app.get('/logout', userController.logout);
     and it will be very hard to debug.
 */
 app.post('/savemeeting', upload.single('meetingImage'), meetingController.saveMeeting);
-app.post('/updatemeeting', meetingController.updateMeeting);
+app.post('/updatemeeting', upload.single('meetingImage'), meetingController.updateMeeting);
 app.delete('/meeting/:id', meetingController.deleteMeeting);
 app.get('/allmeetings', meetingController.readAllMeetings);
 app.get('/upcomingmeetings', meetingController.readFutureMeetings);
@@ -138,12 +129,16 @@ app.get('/pastmeetings',meetingController.readPastMeetings)
 // SpeakingController operations
 app.post('/savespeaker', speakerController.saveSpeaker);
 app.get('/allspeakers', speakerController.readAllSpeakers);
-app.post('/EditSpeaker', speakerController.updateSpeaker);
+app.post('/editspeaker', speakerController.updateSpeaker);
 app.get('/speaker/:id', speakerController.readSpeakerByID);
 
 
 // NewsController operations
 app.post('/savenewspost', upload.array('newsImages', 10), newsController.saveNewsPost);
+app.get('/getnews', newsController.readAllNews);
+app.post('/updatenewspost', upload.array('newsImages', 10), newsController.updateNewsPost);
+app.post('/deletemeeting/:id', newsController.deleteNewsPost);
+app.get('/news/:id', newsController.findPostByID)
 
 
 const server = app.listen(port, hostname, 

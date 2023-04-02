@@ -63,6 +63,25 @@ exports.readAllNews = async function()
 }
 
 /*
+    function to delete a news item by its ID
+*/
+exports.deleteNewsPost = async function(postID)
+{
+    await newsModel.deleteOne({_id:postID}).lean();
+}
+
+
+/*
+    function to update a news item
+*/
+exports.updateNewsItem = async function(postData)
+{
+    let editedPost = await newsModel.findOneAndUpdate( {_id:postData._id}, postData, {returnOriginal: false} ).lean();
+    return editedPost;
+}
+
+
+/*
     function to delete all posts
     EXTREMELY DANGEROUS. FOR TESTING PURPOSES ONLY.
 */

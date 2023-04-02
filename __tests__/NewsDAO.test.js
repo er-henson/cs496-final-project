@@ -89,3 +89,36 @@ test('Reading all created news posts', async function(){
     // should be 3 from the previous three tests that each add a new post
     expect(allNews.length).toBe(3);
 });
+
+test('Updating a news post', async function(){
+    let testNewsPost = 
+    {
+        date: new Date('January 2, 2024 12:10:00'),
+        title:'the sog consumes me',
+        description:'this is what i get for wearing JNCO jeans in the rain'
+    };
+    
+    let createdNewsPost = await dao.create(testNewsPost);
+    let readNewsPost = await dao.readByID(createdNewsPost._id);
+    
+    let storedID = readNewsPost._id;
+    readNewsPost.title = 'i dry cleaned them but theyre still dirty';
+    
+    let updatedPost = await dao.updateNewsItem(readNewsPost);
+    
+    expect(updatedPost.title).toBe('i dry cleaned them but theyre still dirty');
+    expect(updatedPost._id).toStrictEqual(storedID);
+    
+});
+
+test('Deleting a news post', async function(){
+    let allNews = await dao.readAllNews();
+    let firstNewsID = allNews[0]._id;
+    let origLen = allNews.length;
+    
+    await dao.deleteNewsPost(firstNewsID);
+    
+    allNews = await dao.readAllNews();
+    expect(allNews.length).toBe(origLen - 1);
+    
+});

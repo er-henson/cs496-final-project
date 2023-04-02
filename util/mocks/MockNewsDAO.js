@@ -1,20 +1,18 @@
 const fs = require('fs');
 const path = require('path');
 
-let img1 = fs.promises.readFile(path.join(__dirname, './internet_blues.jpg'));
-Promise.resolve(img1).then(function(buffer){
-    img1 = buffer;
-});
 
-let img2 = fs.promises.readFile(path.join(__dirname, './how2screenshot.jpeg'));
-Promise.resolve(img2).then(function(buffer){
-    img2 = buffer;
-});
+let img1name = 'internet_blues.jpg';
+let img1 = fs.readFileSync(path.join(__dirname, './internet_blues.jpg'));
 
-let img3 = fs.promises.readFile(path.join(__dirname, './90s_pattern_2.jpg'));
-Promise.resolve(img3).then(function(buffer){
-    img3 = buffer;
-});
+
+let img2name = './how2screenshot.jpeg';
+let img2 = fs.readFileSync(path.join(__dirname, './how2screenshot.jpeg'));
+
+
+let img3name = './90s_pattern_2.jpg';
+let img3 = fs.readFileSync(path.join(__dirname, './90s_pattern_2.jpg'));
+
 
 
 let newsPosts = [
@@ -57,4 +55,35 @@ exports.create = async function(newsPost)
 exports.readAllNews = async function()
 {
     return newsPosts;
+}
+
+exports.deleteNewsPost = async function(postID)
+{
+    return;
+}
+
+exports.updateNewsItem = async function(newsPost)
+{
+    if (newsPost._id === newsPosts[0]._id || newsPost._id === newsPosts[1]._id )
+    {
+        return newsPost;
+    }
+    else{
+        return null;
+    }
+}
+
+exports.readByID = async function(postID)
+{
+    if (postID === newsPosts[0]._id)
+    {
+        return newsPosts[0];
+    }
+    else if(postID === newsPosts[1]._id )
+    {
+        return newsPosts[1];
+    }
+    else{
+        return null;
+    }
 }
