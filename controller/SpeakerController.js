@@ -71,3 +71,18 @@ exports.readSpeakerByID = async function(request, response)
         response.send(null);
     }
 }
+
+exports.deleteSpeaker = async function(request, response)
+{
+    let deletedSpeaker = await dao.deleteSpeakerByID(request.params.id);
+    if(deletedSpeaker !== null)
+    {
+        response.status(202);
+        response.send(deletedSpeaker);
+    }
+    else
+    {
+        response.status(404);
+        response.send(null);
+    }
+}

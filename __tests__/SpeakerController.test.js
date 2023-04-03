@@ -2,9 +2,6 @@ const SpeakerController = require('../controller/SpeakerController');
 //const SpeakerDAO = require('../model/SpeakerDAO');
 
 describe('SpeakerController', () => {
-let mockDao = null;
-let request = null;
-let response = null;
 
 beforeEach(() => {
 mockDao = {
@@ -87,6 +84,57 @@ mockDao.create.mockReturnValue(newSpeaker);
   expect(response.status).toHaveBeenCalledWith(200);
   expect(response.send).toHaveBeenCalledWith([newSpeaker]);
 });
+});
+describe('deleteSpeaker', () => {
+  let mockDao;
+  let request;
+  let response;
+
+  beforeEach(() => {
+    mockDao = {
+      deleteSpeakerByID: jest.fn()
+    };
+    SpeakerController.setDAO(mockDao);
+    request = {
+      params: {
+        id: 1
+      }
+    };
+    response = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn()
+    };
+  });
+
+  it('should delete the speaker with the given ID and return it in the response', async () => {
+    const mockDeletedSpeaker = {
+      id: 1,
+      name: 'Test Speaker',
+      phone: '123-456-7890',
+      email: 'test@example.com',
+      mailing_address: '123 Main St',
+      specialty: 'Testing'
+    };
+    mockDao.deleteSpeakerByID.mockReturnValue(mockDeletedSpeaker);
+
+    await SpeakerController.deleteSpeaker(request, response);
+
+    expect(mockDao.deleteSpeakerByID).toHaveBeenCalledTimes(1);
+    expect(mockDao.deleteSpeakerByID).toHaveBeenCalledWith(request.params.id);
+    expect(response.status).toHaveBeenCalledWith(202);
+    expect(response.send).toHaveBeenCalledWith(mockDeletedSpeaker);
+  });
+
+  it('should return a 404 status if the speaker with the given ID does not exist', async () => {
+    mockDao.deleteSpeakerByID.mockReturnValue(null);
+
+    await SpeakerController.deleteSpeaker(request, response);
+
+    expect(mockDao.deleteSpeakerByID).toHaveBeenCalledTimes(1);
+    expect(mockDao.deleteSpeakerByID).toHaveBeenCalledWith(request.params.id);
+    expect(response.status).toHaveBeenCalledWith(404);
+    expect(response.send).toHaveBeenCalledWith(null);
+  });
 });
 
 });
