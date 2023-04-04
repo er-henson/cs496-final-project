@@ -122,3 +122,33 @@ exports.logout = async function(request, response)
     
     response.send(null);
 }
+/*
+update a user's information
+*/
+exports.updateUser = async function(request, response) {
+    let userId = request.params.id;
+    let user = await dao.readById(userId);
+    
+    if (!user) {
+        response.status(404);
+        response.send({msg: 'User not found'});
+        return;
+    }
+    
+    let updatedUser = {
+        username: request.body.username || user.username,
+        email: request.body.email || user.email,
+        password: request.body.password ? passUtil.hashPassword(request.body.password) : user.password,
+        admin: request.body.admin || user.admin
+    };
+    
+    let result = await dao.update(userId, updatedUser);
+    
+    if (result) {
+        response.status(200);
+        response.send(result);
+    } else {
+        response.status(500);
+        response.send({msg: 'Failed to update user'});
+    }
+}

@@ -81,6 +81,11 @@ exports.login = async function(userEmail, userPassword)
         return null;
     }
 }
+exports.update = async function(userId, updatedUser) {
+    // search for the user by ID and update its data
+    let updated = await userModel.findByIdAndUpdate(userId, updatedUser, { new: true }).lean();
+    return updated;
+  }
 
 /*
 SUPER DANGEROUS FUNCTION

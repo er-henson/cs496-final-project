@@ -101,6 +101,7 @@ let port = 4000;
 //operations to interact with the database. functions defined in the controller
 // UserController operations
 app.post('/saveuser', userController.saveUser);
+app.post('/updateuser', userController.saveUser);
 app.post('/dologin', userController.login);
 app.get('/getlogged', userController.getLoggedUser);
 app.get('/logout', userController.logout);
@@ -138,7 +139,7 @@ app.post('/savenewspost', upload.array('newsImages', 10), newsController.saveNew
 app.get('/getnews', newsController.readAllNews);
 app.post('/updatenewspost', upload.array('newsImages', 10), newsController.updateNewsPost);
 app.post('/deletemeeting/:id', newsController.deleteNewsPost);
-app.get('/news/:id', newsController.findPostByID)
+//app.get('/news/:id', newsController.findPostByID)
 
 
 const server = app.listen(port, hostname, 

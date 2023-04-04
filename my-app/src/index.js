@@ -11,7 +11,7 @@ import EditSpeaker from './Pages/EditSpeaker';
 import CreateAccount from './Pages/CreateAccount';
 import CreateMeeting from './Pages/CreateMeeting';
 import CreateNewsPost from './Pages/CreateNewsPost';
-
+import EditAccount from './Pages/EditAccount';
 
 import Login from './Pages/Login';
 import EditMeeting from './Pages/EditMeeting'
@@ -42,6 +42,7 @@ root.render(
       <Route exact path="/CreateAccount" element={<CreateAccount/>}/>
       <Route exact path="/CreateSpeaker" element={<CreateSpeaker/>}/>
       <Route exact path="/CreateNewsPost" element={<CreateNewsPost/>}/>
+      <Route exact path="/EditAccount" element={<EditAccount/>}/>
       <Route exact path="/Speakers" element={<Speakers/>}/>
       <Route exact path="/Login" element={<Login/>}/>
       <Route exact path="/UpcomingMeetings" element={<UpcomingMeetings/>}/>
