@@ -109,3 +109,26 @@ test('Updating a meeting', async function()
     expect(newMeeting.speaker).toBe(firstMeeting.speaker);
     expect(newMeeting.content).toBe(firstMeeting.content);
 });
+test('Deleting a meeting', async function()
+{
+// create a test meeting
+let testMeeting =
+{
+date: new Date("April 10, 2023"),
+speaker: "Jane Smith",
+topic: "Introduction to Programming",
+location: "Online",
+content: "This meeting is an introduction to programming concepts."
+};
+let createdMeeting = await dao.create(testMeeting);
+let meetingID = createdMeeting._id;
+
+// delete the meeting
+await dao.deleteMeeting(meetingID);
+
+// query for the meeting again
+let deletedMeeting = await dao.readByID(meetingID);
+
+// expect the deleted meeting to be null
+expect(deletedMeeting).toBeNull();
+});
