@@ -136,7 +136,57 @@ describe('deleteSpeaker', () => {
     expect(response.send).toHaveBeenCalledWith(null);
   });
 });
+describe('updateSpeaker', () => {
+  let mockDao;
+  let request;
+  let response;
+  
+  beforeEach(() => {
+  mockDao = {
+  updateSpeaker: jest.fn()
+  };
+  SpeakerController.setDAO(mockDao);
+  request = {
+  body: {
+  name: 'Test Speaker 2',
+  phone: '987-654-3210',
+  email: 'test2@example.com',
+  mailing_address: '456 Main St',
+  specialty: 'Updated Testing'
+  }
+  };
+  response = {
+  status: jest.fn().mockReturnThis(),
+  send: jest.fn()
+  };
+  });
+  
+  it('should call dao.updateSpeaker with the updated speaker object', async () => {
+  await SpeakerController.updateSpeaker(request, response);
+  
 
+  expect(mockDao.updateSpeaker).toHaveBeenCalledTimes(1);
+  expect(mockDao.updateSpeaker).toHaveBeenCalledWith(request.body);
+  });
+  
+  it('should send the updated speaker in the response', async () => {
+  const updatedSpeaker = { id: 2, ...request.body };
+  mockDao.updateSpeaker.mockReturnValue(updatedSpeaker);
+
+  await SpeakerController.updateSpeaker(request, response);
+  
+  expect(response.status).toHaveBeenCalledWith(202);
+  expect(response.send).toHaveBeenCalledWith(updatedSpeaker);
+  });
+  
+  it('should return a 404 status if the speaker was not updated', async () => {
+  mockDao.updateSpeaker.mockReturnValue(null);
+  await SpeakerController.updateSpeaker(request, response);
+  
+  expect(response.status).toHaveBeenCalledWith(404);
+  expect(response.send).toHaveBeenCalledWith(null);
+  });
+  })
 });
 
 

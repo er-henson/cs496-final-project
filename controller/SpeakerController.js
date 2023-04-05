@@ -43,7 +43,7 @@ exports.updateSpeaker = async function(request, response)
         mailing_address: request.body.mailing_address,
         specialty: request.body.specialty
     };
-    let returnedSpeaker = await dao.updateMeeting(updatedSpeaker);
+    let returnedSpeaker = await dao.updateSpeaker(updatedSpeaker);
     
     if(returnedSpeaker !== null)
     {

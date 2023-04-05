@@ -159,7 +159,6 @@ test('Deleting a news post while logged in as admin', async function(){
     
     expect(res.status).toHaveBeenCalledWith(204);
 });
-
 test('Deleting a news post while logged in as a normal user', async function(){
     let req = conIntercept.mockRequest();
     let res = conIntercept.mockResponse();
@@ -363,4 +362,20 @@ test('Finding a non-existing news post by its ID', async function() {
     
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.send).toHaveBeenCalledWith(null);
+});
+test('Creating a news post with DAO error', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    // Make the DAO return null to simulate an error
+    mockDAO.create = jest.fn(() => null);
+    
+    await newsController.saveNewsPost(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.send).toHaveBeenCalledWith(null);
+    
+    // Restore the original DAO function
+    mockDAO.create = jest.fn(() => { /*...*/ });
+    
 });

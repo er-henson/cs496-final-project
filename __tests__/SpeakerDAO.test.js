@@ -12,7 +12,7 @@ afterAll(async function(){
 
 const mongoose = require('mongoose');
 const assert = require('assert');
-const { create, readAll, deleteAll, updateSpeaker,deleteSpeakerByID } = require('../model/SpeakerDAO');
+const { create, readAll, deleteAll, updateSpeaker,deleteSpeakerByID, readByID} = require('../model/SpeakerDAO');
 
 // Set up a connection to a test database
 
@@ -59,36 +59,38 @@ describe('DAO tests', function() {
             assert.strictEqual(createdSpeaker, null);
         });
     });
-
-    describe('readAll function', function() {
-        // it('should return all speakers', async function() {
-            // const newSpeaker1 = {
-            //     name: 'Test Speaker 1',
-            //     phone: '123-456-7890',
-            //     email: 'test1@example.com',
-            //     mailing_address: '123 Main St',
-            //     specialty: 'Testing'
-            // };
-        //     const newSpeaker2 = {
-        //         name: 'Test Speaker 2',
-        //         phone: '987-654-3210',
-        //         email: 'test2@example.com',
-        //         mailing_address: '456 Second St',
-        //         specialty: 'test_smith'
-        //     };
-        //     await create(newSpeaker1);
-        //     await create(newSpeaker2);
-        //     const allSpeakers = await readAll();
-        //     console.log(allSpeakers)
-        //     assert.strictEqual(allSpeakers.length, 2);
-        //     assert.strictEqual(allSpeakers[0].name, newSpeaker1.name);
-        //     assert.strictEqual(allSpeakers[1].name, newSpeaker2.name);
-        // });
-
-        it('should return an empty array if no speakers exist', async function() {
-            const allSpeakers = await readAll();
-            assert.deepStrictEqual(allSpeakers, []);
-        });
+    describe('readByID function', function() {
+      it('should return a speaker by ID', async function() {
+        // Create a new speaker and save their ID
+        const newSpeaker = {
+          name: 'Test Speaker',
+          phone: '123-456-7890',
+          email: 'test@example.com',
+          mailing_address: '123 Main St',
+          specialty: 'Testing'
+        };
+        const createdSpeaker = await create(newSpeaker);
+        const speakerID = createdSpeaker._id;
+    
+        // Call the readByID function to get the speaker by ID
+        const readSpeaker = await readByID(speakerID);
+    
+        // Check that the returned speaker matches the original speaker
+        assert.strictEqual(readSpeaker._id.toString(), speakerID.toString());
+        assert.strictEqual(readSpeaker.name, newSpeaker.name);
+        assert.strictEqual(readSpeaker.phone, newSpeaker.phone);
+        assert.strictEqual(readSpeaker.email, newSpeaker.email);
+        assert.strictEqual(readSpeaker.mailing_address, newSpeaker.mailing_address);
+        assert.strictEqual(readSpeaker.specialty, newSpeaker.specialty);
+      });
+    
+      it('should return null if no speaker with the given ID exists', async function() {
+        // Call the readByID function with an ID that does not exist
+        const readSpeaker = await readByID(mongoose.Types.ObjectId());
+    
+        // Check that the function returns null
+        assert.strictEqual(readSpeaker, null);
+      });
     });
 
     describe('deleteAll function', function() {

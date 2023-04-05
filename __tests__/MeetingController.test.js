@@ -12,6 +12,8 @@ describe('MeetingController', () => {
       readAll: jest.fn(),
       getPastMeetings: jest.fn(),
       getUpcomingMeetings: jest.fn(),
+      readByID: jest.fn(),
+      updateMeeting: jest.fn()
     };
     MeetingController.setDAO(mockDao);
     request = {
@@ -125,7 +127,80 @@ describe('MeetingController', () => {
       expect(response.send).toHaveBeenCalledWith([newMeeting]);
     });
   });
+  describe('readMeetingByID', () => {
+    it('should return the meeting with the specified ID', async () => {
+      const meetingID = '6418e67eb4803b6450bba029';
+      const mockMeeting = { id: meetingID, date: '2023-03-01', speaker: 'John Doe', topic: 'Testing Jest', location: 'Online', content: 'This is a test meeting.' };
+      mockDao.readByID.mockReturnValue(mockMeeting);
+      const mockRequest = { params: { id: meetingID } };
+      const mockResponse = { status: jest.fn().mockReturnThis(), send: jest.fn() };
   
+      await MeetingController.readMeetingByID(mockRequest, mockResponse);
+  
+      expect(mockDao.readByID).toHaveBeenCalledWith(meetingID);
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.send).toHaveBeenCalledWith(mockMeeting);
+    });
+  
+    it('should return a 404 status code and null response when meeting is not found', async () => {
+      const meetingID = 'nonexistent-meeting-id';
+      mockDao.readByID.mockReturnValue(null);
+      const mockRequest = { params: { id: meetingID } };
+      const mockResponse = { status: jest.fn().mockReturnThis(), send: jest.fn() };
+  
+      await MeetingController.readMeetingByID(mockRequest, mockResponse);
+  
+      expect(mockDao.readByID).toHaveBeenCalledWith(meetingID);
+      expect(mockResponse.status).toHaveBeenCalledWith(404);
+      expect(mockResponse.send).toHaveBeenCalledWith(null);
+    });
+  });
+  describe('updateMeeting', () => {
+    it('should call dao.updateMeeting with the updated meeting object', async () => {
+      const updatedMeeting = {
+        _id: '12345',
+        date: '2023-04-15',
+        speaker: 'Jane Doe',
+        topic: 'Testing with Jest and Enzyme',
+        location: 'Online',
+        content: 'This is an updated test meeting.',
+      };
+      request.body = updatedMeeting;
+
+      await MeetingController.updateMeeting(request, response);
+
+      expect(mockDao.updateMeeting).toHaveBeenCalledTimes(1);
+      expect(mockDao.updateMeeting).toHaveBeenCalledWith(updatedMeeting);
+    });
+
+    it('should send the updated meeting in the response', async () => {
+      const updatedMeeting = {
+        _id: '12345',
+        date: '2023-04-15',
+        speaker: 'Jane Doe',
+        topic: 'Testing with Jest and Enzyme',
+        location: 'Online',
+        content: 'This is an updated test meeting.',
+      };
+      const returnedMeeting = { id: 1, ...updatedMeeting };
+      mockDao.updateMeeting.mockReturnValue(returnedMeeting);
+      request.body = updatedMeeting;
+
+      await MeetingController.updateMeeting(request, response);
+
+      expect(response.status).toHaveBeenCalledWith(202);
+      expect(response.send).toHaveBeenCalledWith(returnedMeeting);
+    });
+
+    it('should send a 404 status code if the meeting was not found', async () => {
+      mockDao.updateMeeting.mockReturnValue(null);
+
+      await MeetingController.updateMeeting(request, response);
+
+      expect(response.status).toHaveBeenCalledWith(404);
+      expect(response.send).toHaveBeenCalledWith(null);
+    });
+  });
 
   describe('deleteMeeting', () => {
     it('should call dao.deleteMeeting with the meeting ID', async () => {
