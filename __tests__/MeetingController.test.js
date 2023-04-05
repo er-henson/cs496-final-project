@@ -10,6 +10,7 @@ describe('MeetingController', () => {
     mockDao = {
       create: jest.fn(),
       readAll: jest.fn(),
+      getPastMeetings: jest.fn(),
     };
     MeetingController.setDAO(mockDao);
     request = {
@@ -52,7 +53,23 @@ describe('MeetingController', () => {
 
       expect(mockDao.readAll).toHaveBeenCalledTimes(1);
     });
-
+    describe('readPastMeetings', () => {
+      it('should call dao.getPastMeetings', async () => {
+        await MeetingController.readPastMeetings(request, response);
+    
+        expect(mockDao.getPastMeetings).toHaveBeenCalledTimes(1);
+      });
+    
+      it('should send all past meetings in the response', async () => {
+        const pastMeetings = [{ id: 1, ...request.body }];
+        mockDao.getPastMeetings.mockReturnValue(pastMeetings);
+    
+        await MeetingController.readPastMeetings(request, response);
+    
+        expect(response.status).toHaveBeenCalledWith(200);
+        expect(response.send).toHaveBeenCalledWith(pastMeetings);
+      });
+    });
     it('should send all meetings in the response', async () => {
       const allMeetings = [{ id: 1, ...request.body }];
       mockDao.readAll.mockReturnValue(allMeetings);
