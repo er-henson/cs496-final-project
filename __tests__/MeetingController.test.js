@@ -270,6 +270,3 @@ describe('MeetingController', () => {
     });
     
   });
-
-
-

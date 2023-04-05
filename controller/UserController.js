@@ -125,7 +125,32 @@ exports.logout = async function(request, response)
 /*
 update a user's information
 */
-exports.updateUser = async function(request, response) {
+exports.updateUser = async function(request, response)
+{
+    let updatedUser = {
+        username: request.body.username,
+        email: request.body.email,
+        password: request.body.password,
+        admin: request.body.admin
+    };
+    let returnedUser = await dao.update(request.params.id,updatedUser);
+    
+    if(returnedSpeaker !== null)
+    {
+        response.status(202);
+        response.send(returnedUser);
+    }
+    else
+    {
+        response.status(404);
+        response.send(null);
+    }
+}
+
+/*
+delete a user
+*/
+exports.deleteUser = async function(request, response) {
     let userId = request.params.id;
     let user = await dao.readById(userId);
     
@@ -135,20 +160,13 @@ exports.updateUser = async function(request, response) {
         return;
     }
     
-    let updatedUser = {
-        username: request.body.username || user.username,
-        email: request.body.email || user.email,
-        password: request.body.password ? passUtil.hashPassword(request.body.password) : user.password,
-        admin: request.body.admin || user.admin
-    };
-    
-    let result = await dao.update(userId, updatedUser);
+    let result = await dao.delete(userId);
     
     if (result) {
         response.status(200);
-        response.send(result);
+        response.send({msg: 'User deleted successfully'});
     } else {
         response.status(500);
-        response.send({msg: 'Failed to update user'});
+        response.send({msg: 'Failed to delete user'});
     }
 }

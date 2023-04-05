@@ -187,6 +187,59 @@ describe('updateSpeaker', () => {
   expect(response.send).toHaveBeenCalledWith(null);
   });
   })
+
+  describe('readSpeakerByID', () => {
+    let mockDao;
+    let request;
+    let response;
+  
+    beforeEach(() => {
+      mockDao = {
+        readByID: jest.fn()
+      };
+      SpeakerController.setDAO(mockDao);
+      request = {
+        params: {
+          id: 1
+        }
+      };
+      response = {
+        status: jest.fn().mockReturnThis(),
+        send: jest.fn()
+      };
+    });
+  
+    it('should return the speaker with the given ID and a 200 status', async () => {
+      const mockSpeaker = {
+        id: 1,
+        name: 'Test Speaker',
+        phone: '123-456-7890',
+        email: 'test@example.com',
+        mailing_address: '123 Main St',
+        specialty: 'Testing'
+      };
+      mockDao.readByID.mockReturnValue(mockSpeaker);
+  
+      await SpeakerController.readSpeakerByID(request, response);
+  
+      expect(mockDao.readByID).toHaveBeenCalledTimes(1);
+      expect(mockDao.readByID).toHaveBeenCalledWith(request.params.id);
+      expect(response.status).toHaveBeenCalledWith(200);
+      expect(response.send).toHaveBeenCalledWith(mockSpeaker);
+    });
+  
+    it('should return a 404 status if the speaker with the given ID does not exist', async () => {
+      mockDao.readByID.mockReturnValue(null);
+  
+      await SpeakerController.readSpeakerByID(request, response);
+  
+      expect(mockDao.readByID).toHaveBeenCalledTimes(1);
+      expect(mockDao.readByID).toHaveBeenCalledWith(request.params.id);
+      expect(response.status).toHaveBeenCalledWith(404);
+      expect(response.send).toHaveBeenCalledWith(null);
+    });
+  });
+  
 });
 
 
