@@ -81,7 +81,7 @@ exports.readByID = async function(postID)
     }
     else if(postID === newsPosts[1]._id )
     {
-        return newsPosts[1];
+        //return newsPosts[1];
     }
     else{
         return null;

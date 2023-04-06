@@ -135,7 +135,7 @@ exports.updateUser = async function(request, response)
     };
     let returnedUser = await dao.update(request.params.id,updatedUser);
     
-    if(returnedSpeaker !== null)
+    if(returnedUser !== null)
     {
         response.status(202);
         response.send(returnedUser);
