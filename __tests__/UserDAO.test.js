@@ -107,21 +107,26 @@ test('Read user information from email', async function()
     expect(returnedUser.username).toBe(newUser.username);
 });
 test('Update user by ID', async function() {
-    // creating a user to update
-    let newUser = {
+    // create a new user
+    let userToCreate = {
       username: "testuser",
       email: "testuser@example.com",
       password: "password",
       admin: 0
     };
-    let createdUser = await dao.create(newUser);
+    let createdUser = await dao.create(userToCreate);
   
-    // updating the user's email
-    let updatedUser = {
+    // update the user's email
+    let updatedUserData = {
       email: "updated@example.com"
     };
-    let updated = await dao.update(createdUser._id, updatedUser);
+    let updatedUser = await dao.update(createdUser._id, updatedUserData);
   
-    // verifying the update was successful
-    expect(updated.email).toBe(updatedUser.email);
+    // verify the update was successful
+    expect(updatedUser).toBeDefined();
+    expect(updatedUser._id).toEqual(createdUser._id);
+    expect(updatedUser.username).toEqual(userToCreate.username);
+    expect(updatedUser.email).toEqual(updatedUserData.email);
+    expect(updatedUser.password).toEqual(userToCreate.password);
+    expect(updatedUser.admin).toEqual(userToCreate.admin);
   });

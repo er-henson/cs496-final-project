@@ -81,11 +81,10 @@ exports.login = async function(userEmail, userPassword)
         return null;
     }
 }
-exports.update = async function(updatedUser) {
-    // search for the user by ID and update its data
-    let updated = await userModel.findByIdAndUpdate(updatedUser.id,updatedUser, { new: true }).lean();
+exports.update = async function(id, updatedUser) {
+    let updated = await userModel.findByIdAndUpdate(id, updatedUser, { new: true });
     return updated;
-  }
+  };
   exports.delete = async function(userId) {
     let deletedUser = await userModel.findByIdAndDelete(userId).lean();
     return deletedUser;
