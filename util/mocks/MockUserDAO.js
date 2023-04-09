@@ -32,3 +32,19 @@ exports.login = async function(email, pw) {
         return null;
     }
 };
+exports.update = async function(id,updatedUser) {
+
+
+    let existingUser = {
+        _id: 'abc',
+        username: 'phil',
+        email: 'phil@somewhere',
+        password: passUtil.hashPassword('phils pw'),
+        admin: 0
+    };
+    if (id === existingUser._id) {
+        return updatedUser;
+    } else {
+        return null;
+    }
+};

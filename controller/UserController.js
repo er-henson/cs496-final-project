@@ -12,32 +12,33 @@ exports.setDAO = function(otherDAO)
 /*
 save a user in the database
 */
-exports.saveUser = async function(request, response)
-{
-    
-    let newUser = 
-    {
+exports.saveUser = async function(request, response) {
+    let newUser = {
         username: request.body.username,
         password: passUtil.hashPassword(request.body.password),
         email: request.body.email,
-        admin:0
+        admin: 0
     };
-    
+
     // save the user in the DAO
     let savedUser = await dao.create(newUser);
+
     // if the return is not null, the user is created
-    if(savedUser !== null)
-    {        
+    if (savedUser !== null) {
         response.status(200);
+        response.send({ id: savedUser._id });
         response.end();
-    }
-    else // if the return is null, there is a user with the existing email
-    {
+    } else { // if the return is null, there is a user with the existing email
         response.status(401);
-        response.send( {msg: 'User with that email already exists'} );
+        response.send({ msg: 'User with that email already exists' });
         response.end();
     }
-}
+};
+
+
+
+
+
 
 /*
 login as a user
@@ -133,7 +134,7 @@ exports.updateUser = async function(request, response)
         password: request.body.password,
         admin: request.body.admin
     };
-    let returnedUser = await dao.update(request.params.id,updatedUser);
+    let returnedUser = await dao.update(request.body.id,updatedUser);
     
     if(returnedUser !== null)
     {

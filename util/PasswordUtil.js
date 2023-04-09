@@ -6,6 +6,6 @@ exports.hashPassword = function(pass){
     return hashedpass;
 }
 
-// exports.createSalt = function(){
-//     return bcrypt.genSaltSync(3);
-// }
+exports.createSalt = function(){
+    return bcrypt.genSaltSync(3);
+}
