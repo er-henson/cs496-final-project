@@ -27,29 +27,39 @@ important data fields are:
     indexing certain text fields to implement searching
 */
 const meetingSchema = new mongoose.Schema(
-{
-    date:{ type:Date, default:Date.now },
-    speaker: String,
-    topic: {
-        type:String,
-        required:true
-    },
-    location: String,
-    content: {
-        type:String,
-        required:true
-    },
-    img: {
-        data: Buffer,
-        title: String,
-        contentType: String
-    },
-    feedback: {
-        avgRating: Number,
-        numRatings: Number,
-        reviews: [String]
-    }
-});
+    {
+        date:{ type:Date, default:Date.now },
+        speaker: String,
+        topic: {
+            type:String,
+            required:true
+        },
+        location: String,
+        content: {
+            type:String,
+            required:true
+        },
+        img: {
+            data: Buffer,
+            title: String,
+            contentType: String
+        },
+        feedback: {
+            avgRating: Number,
+            numRatings: Number,
+            reviews: [String],
+            votes: [{
+                userId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'User'
+                },
+                value: {
+                    type: Number,
+                    enum: [0, 1] // -1 for downvote, 0 for no vote, 1 for upvote
+                }
+            }]
+        }
+    });
 // creates the index for the text fields
 // required to implement searching
 meetingSchema.index({
@@ -170,7 +180,37 @@ exports.searchMeetings = async function(searchQuery)
 /*
 function to search for a meeting based on date
 */
-
 /*
 function to search for a meeting based on the speaker
 */
+
+exports.voteOnMeeting = async function(meetingID, rating, review)
+{
+    let meeting = await meetingModel.findById(meetingID);
+    if (!meeting) {
+        throw new Error("Meeting not found");
+    }
+    if (meeting.feedback) {
+        // if the meeting already has feedback, update the average rating and number of ratings
+        let numRatings = meeting.feedback.numRatings + 1;
+        let avgRating = ((meeting.feedback.avgRating * meeting.feedback.numRatings) + rating) / numRatings;
+        let reviews = [...meeting.feedback.reviews, review];
+        // update the feedback object in the meeting model
+        meeting.feedback = {
+            avgRating,
+            numRatings,
+            reviews
+        }
+    } else {
+        // if the meeting doesn't have feedback yet, create a new feedback object
+        meeting.feedback = {
+            avgRating: rating,
+            numRatings: 1,
+            reviews: [review]
+        }
+    }
+    // save the updated meeting to the database
+    await meeting.save();
+    // return the updated meeting object
+    return meeting.toObject();
+}
