@@ -75,7 +75,7 @@ test('Finding a past meeting', async function()
     
     // function in question that we want to test
     let storedPastMeeting = await dao.getPastMeetings();
-    console.log(storedPastMeeting);
+    //console.log(storedPastMeeting);
     
     // setting the length to '2' because the 'mr. monkey' meeting is still in the DB
     // same reason that the pastMeeting in this test is at index '1' instead of '0'
@@ -109,26 +109,67 @@ test('Updating a meeting', async function()
     expect(newMeeting.speaker).toBe(firstMeeting.speaker);
     expect(newMeeting.content).toBe(firstMeeting.content);
 });
+
 test('Deleting a meeting', async function()
 {
-// create a test meeting
-let testMeeting =
-{
-date: new Date("April 10, 2023"),
-speaker: "Jane Smith",
-topic: "Introduction to Programming",
-location: "Online",
-content: "This meeting is an introduction to programming concepts."
-};
-let createdMeeting = await dao.create(testMeeting);
-let meetingID = createdMeeting._id;
+    // create a test meeting
+    let testMeeting =
+    {
+        date: new Date("April 10, 2023"),
+        speaker: "Jane Smith",
+        topic: "Introduction to Programming",
+        location: "Online",
+        content: "This meeting is an introduction to programming concepts."
+    };
+    
+    let createdMeeting = await dao.create(testMeeting);
+    let meetingID = createdMeeting._id;
 
-// delete the meeting
-await dao.deleteMeeting(meetingID);
+    // delete the meeting
+    await dao.deleteMeeting(meetingID);
 
-// query for the meeting again
-let deletedMeeting = await dao.readByID(meetingID);
+    // query for the meeting again
+    let deletedMeeting = await dao.readByID(meetingID);
 
-// expect the deleted meeting to be null
-expect(deletedMeeting).toBeNull();
+    // expect the deleted meeting to be null
+    expect(deletedMeeting).toBeNull();
 });
+
+test('Searching through several meetings with text search', async function(){
+    let tm1 =
+    {
+        date: new Date("April 10, 2023"),
+        speaker: "Jane Smith",
+        topic: "Introduction to Programming",
+        location: "Online",
+        content: "This meeting is an introduction to programming concepts."
+    };
+    
+    let tm2 =
+    {
+        date: new Date("April 10, 10"),
+        speaker: "Emperor Augustus",
+        topic: "Rome and the conception of peace",
+        location: "Roman Forum",
+        content: "Specifically discussing the term 'Pax Romana'."
+    };
+    
+    let tm3 =
+    {
+        date: new Date("March 3, 1971"),
+        speaker: "Vito Corleone",
+        topic: "Mafia-ing for dummies",
+        location: "1970s New York",
+        content: "Discussing how to build a successful mafia empire."
+    };
+    
+    let createdM1 = await dao.create(tm1);
+    let createdM2 = await dao.create(tm2);
+    let createdM3 = await dao.create(tm3);
+    
+    let searchRes = await dao.searchMeetings("new york");
+    
+    expect(searchRes.length).toBe(1);
+    expect(searchRes[0].speaker).toBe(tm3.speaker);
+});
+

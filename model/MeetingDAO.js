@@ -22,23 +22,46 @@ important data fields are:
     representing a file. this is really the only change in the 
     DAO.
 */
+
+/*
+    indexing certain text fields to implement searching
+*/
 const meetingSchema = new mongoose.Schema(
 {
     date:{ type:Date, default:Date.now },
     speaker: String,
-    topic: String,
+    topic: {
+        type:String,
+        required:true
+    },
     location: String,
-    content: String,
+    content: {
+        type:String,
+        required:true
+    },
     img: {
         data: Buffer,
         title: String,
         contentType: String
+    },
+    feedback: {
+        avgRating: Number,
+        numRatings: Number,
+        reviews: [String]
     }
 });
-
-
+// creates the index for the text fields
+// required to implement searching
+meetingSchema.index({
+    speaker: "text",
+    topic: "text",
+    location: "text",
+    content: "text"
+});
 
 const meetingModel = mongoose.model('Meeting',meetingSchema);
+
+
 /*
  function to save a meeting to the database using a JSON object
  assumes the 'meeting' JSON object has:
@@ -97,10 +120,12 @@ exports.getUpcomingMeetings = async function()
     let futureMeetings = await meetingModel.find({date: {$gt: currentDate}}).lean();
     return futureMeetings;
 }
-exports.deleteMeeting = async function(meetingID) {
+
+exports.deleteMeeting = async function(meetingID)
+{
     // delete the meeting by its ID
     await meetingModel.deleteOne({ _id: meetingID }).lean();
-  }
+}
 
 
 
@@ -125,3 +150,27 @@ exports.updateMeeting = async function(meetingData)
     let editedMeeting = await meetingModel.findOneAndUpdate( {_id: meetingData._id}, meetingData, {returnOriginal: false}).lean();
     return editedMeeting;
 }
+
+/*
+function to search for a meeting based on the contents of the description and title
+*/
+exports.searchMeetings = async function(searchQuery)
+{
+    let searchedMeetings = await meetingModel.find(
+        {$text: {
+            $search: searchQuery,
+            $caseSensitive: false,
+            $diacriticSensitive: false
+            }
+        }
+    );
+    return searchedMeetings;
+}
+
+/*
+function to search for a meeting based on date
+*/
+
+/*
+function to search for a meeting based on the speaker
+*/

@@ -34,7 +34,12 @@ exports.saveMeeting = async function(request, response)
         topic: request.body.topic,
         location: request.body.location,
         content: request.body.content,
-
+        // setting up empty fields for feedback
+        feedback: {
+            0,
+            0,
+            []
+        }
     };
     
     if(request.file)
@@ -155,5 +160,31 @@ exports.deleteMeeting = async function(request, response) {
     } catch (error) {
         response.status(500);
         response.send({ error: error.message });
+    }
+}
+
+/*
+POST request
+add a rating to a meeting
+assumes the rating is on a 1-5 scale and checks if there is a review as well
+*/
+
+/*
+GET request
+performs a search query on data through text search of the indexed fields
+*/
+exports.searchForMeetings = async function(request, response){
+    let meetingSearch = request.body.search;
+    
+    let returnedMeetings = await dao.searchMeetings(meetingSearch);
+    
+    if(returnedMeetings && returnedMeetings.length > 0)
+    {
+        response.status(200);
+        response.send(returnedMeetings);
+    }
+    else{
+        reseponse.status(404);
+        response.send(null);
     }
 }
