@@ -36,10 +36,9 @@ exports.saveMeeting = async function(request, response)
         content: request.body.content,
         // setting up empty fields for feedback
         feedback: {
-            0,
-            0,
-            []
-        }
+            avgRatings:0,
+            numRatings:0,
+            reviews:[]}
     };
     
     if(request.file)
