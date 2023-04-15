@@ -45,8 +45,6 @@ const meetingSchema = new mongoose.Schema(
             contentType: String
         },
         feedback: {
-            avgRating: Number,
-            numRatings: Number,
             reviews: [String],
             votes: [{
                 userId: {
@@ -55,7 +53,7 @@ const meetingSchema = new mongoose.Schema(
                 },
                 value: {
                     type: Number,
-                    enum: [0, 1] // -1 for downvote, 0 for no vote, 1 for upvote
+                    enum: [-1, 0, 1] // -1 for downvote, 0 for no vote, 1 for upvote
                 }
             }]
         }
