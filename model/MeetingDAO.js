@@ -182,6 +182,9 @@ function to search for a meeting based on date
 function to search for a meeting based on the speaker
 */
 
+/*
+function to vote on a meeting
+*/
 exports.voteOnMeeting = async function(meetingID, rating, review)
 {
     let meeting = await meetingModel.findById(meetingID);
