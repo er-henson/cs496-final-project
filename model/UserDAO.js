@@ -16,7 +16,11 @@ const userSchema = new mongoose.Schema(
     username: String,
     email: String,
     password: String,
-    admin: Number
+    admin: {
+        type: Number,
+        immutable: true, // this makes the admin field immutable
+        required: true,
+      },
 });
 const userModel = mongoose.model('User',userSchema);
 
