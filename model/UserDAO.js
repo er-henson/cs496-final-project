@@ -89,10 +89,15 @@ exports.update = async function(id, updatedUser) {
     let updated = await userModel.findByIdAndUpdate(id, updatedUser, { new: true });
     return updated;
   };
-  exports.delete = async function(userId) {
-    let deletedUser = await userModel.findByIdAndDelete(userId).lean();
-    return deletedUser;
-  }
+  exports.delete = async function(id) {
+    if(mongoose.isValidObjectId(id)){
+        let deletedUser = await userModel.findByIdAndDelete(id).lean();
+        return deletedUser;
+    }
+    else{
+        return null;
+    }
+  };
 
 /*
 SUPER DANGEROUS FUNCTION

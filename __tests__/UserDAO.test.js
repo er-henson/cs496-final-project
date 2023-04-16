@@ -1,6 +1,6 @@
 const dbcon = require('../model/DBConnection');
 const dao = require('../model/UserDAO');
-
+const { ObjectId } = require('mongodb');
 beforeAll(async function(){
     await dbcon.connect('test');
 });
@@ -130,3 +130,15 @@ test('Update user by ID', async function() {
     expect(updatedUser.password).toEqual(userToCreate.password);
     expect(updatedUser.admin).toEqual(userToCreate.admin);
   });
+describe('delete', () => {
+    it('should delete a user from the database', async () => {
+      const user = await dao.create({ _id: new ObjectId(),name: 'Test User', email: 'testuser@example.com', admin:1 });
+      const deletedUser = await dao.delete(user._id);
+      expect(deletedUser._id).toEqual(user._id);
+    });
+
+    it('should return null when deleting a non-existent user', async () => {
+      const deletedUser = await dao.delete(new ObjectId());
+      expect(deletedUser).toBeNull();
+    });
+});
