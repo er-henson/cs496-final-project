@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useState,useEffect } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -7,19 +7,19 @@ function EditAccount() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [id, setId] = useState('');
 
   // Retrieve the user ID from the URL location and initialize navigation
-  const loc = useLocation();
   const navigate = useNavigate();
-  const userId = loc.state.id;
-
   // Make a GET request to retrieve user information from the backend
   useEffect(() => {
     axios
-      .get('http://localhost:4000/user/' + userId)
+      .get('http://localhost:4000/getlogged')
       .then((response) => {
-        setUsername(response.data.username);
-        setEmail(response.data.email);
+        setUsername(response.username);
+        setEmail(response.email);
+        setId(response.id);
+        
       })
       .catch((error) => {
         console.log('error in user GET request');
@@ -32,9 +32,8 @@ function EditAccount() {
     e.preventDefault();
 
     // Send the user information to the backend to update their account
-    axios
-      .post('http://localhost:4000/updateuser', {
-        _id: userId,
+    axios.post('http://localhost:4000/updateuser', {
+        _id: id,
         username: username,
         email: email,
         password: password,
@@ -79,7 +78,7 @@ function EditAccount() {
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
-              type="email"
+              type="text"
               className="form-control"
               id="email"
               required
@@ -92,7 +91,7 @@ function EditAccount() {
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
-              type="password"
+              type="text"
               className="form-control"
               id="password"
               value={password}

@@ -2,6 +2,7 @@ const userController = require('../controller/UserController');
 const conIntercept = require('../util/ControllerInterceptor');
 const mockDao = require('../util/mocks/MockUserDao');
 const passUtil = require('../util/PasswordUtil');
+const { ObjectId } = require('mongodb');
 
 
 
@@ -161,49 +162,35 @@ test('Logout while not logged in', async function(){
     expect(req.session.user).toBe(null);
     expect(res.send).toHaveBeenCalledWith(null);
 });
-// test('Update User Account', async function(){
+test('Update User Account', async function(){
 
-//     //Creating account
-//     let req = conIntercept.mockRequest();
-//     let res = conIntercept.mockResponse();
-//     const request = {
-//         body: {
-//           username: "johndoe2",
-//           email: "johndoe2@example.com",
-//           password: "mypassword2",
-//           admin: 0
-//         }
-//       };
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    let existingUser = {
+        _id: 'abc',
+        username: 'phil',
+        email: 'phil@somewhere',
+        password: passUtil.hashPassword('phils pw'),
+        admin: 0
+    };
+    
+    req.body = existingUser;
+    await userController.saveUser(req, res);
 
-//       // logging in
-//       let req2 = conIntercept.mockRequest();
-//       let res2 = conIntercept.mockResponse();
-      
-//       req.body.email = 'johndoe2@example.com';
-//       req.body.password = "mypassword2";
-      
-//       await userController.login(req2, res2);
 
-//       req.body = request;
-//       await userController.saveUser(req, res);
-//       const id = res._id;
-//       const response = {
-//         status: jest.fn().mockReturnThis(),
-//         send: jest.fn()
-//       };
-      
-        
+    //Update User, given that
+    let req2 = conIntercept.mockRequest();
+    let res2 = conIntercept.mockResponse();
+    let request2 = {
+             _id: 'abc',
+              username: "johndoe2",
+              email: "johndoe2@example.com",
+              password: "mypassword2",
+              admin: 0
+          };
+        req2.body = request2;
+        await userController.updateUser(req2, res2);
+        expect(res2.status).toHaveBeenCalledWith(202); // Verify that the response status is set to 202
 
-//         const request2 = {
-//             body: {
-//              _id: id,
-//               username: "johndoe2",
-//               email: "johndoe2@example.com",
-//               password: "mypassword2",
-//               admin: 0
-//             }
-//           };
-//         await userController.updateUser(request2, response);
-//         expect(response.status).toHaveBeenCalledWith(202); // Verify that the response status is set to 202
-
-// });
+});

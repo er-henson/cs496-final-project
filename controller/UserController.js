@@ -134,8 +134,9 @@ exports.updateUser = async function(request, response)
         password: request.body.password,
         admin: request.body.admin
     };
-    let returnedUser = await dao.update(request.body.id,updatedUser);
-    
+    console.log(updatedUser);
+    let returnedUser = await dao.update(request.body._id,updatedUser);
+    console.log(returnedUser);
     if(returnedUser !== null)
     {
         response.status(202);
