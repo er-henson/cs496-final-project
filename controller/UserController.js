@@ -153,22 +153,29 @@ exports.updateUser = async function(request, response)
 delete a user
 */
 exports.deleteUser = async function(request, response) {
-    let userId = request.params.id;
-    let user = await dao.readById(userId);
+    let requesterId = request.params._id;
+    let targetId = request.body._id;
+    let requesterIsAdmin = request.body.admin;
     
-    if (!user) {
-        response.status(404);
-        response.send({msg: 'User not found'});
-        return;
-    }
-    
-    let result = await dao.delete(userId);
-    
-    if (result) {
-        response.status(200);
-        response.send({msg: 'User deleted successfully'});
+    if (requesterIsAdmin || requesterId.equals(targetId)) {
+        let user = await dao.readById(targetId);
+        if (!user) {
+            response.status(404);
+            response.send({msg: 'User not found'});
+            return;
+        }
+        
+        let result = await dao.delete(targetId);
+        
+        if (result) {
+            response.status(204);
+            response.send({msg: 'User deleted successfully'});
+        } else {
+            response.status(404);
+            response.send({msg: 'Failed to delete user'});
+        }
     } else {
-        response.status(500);
-        response.send({msg: 'Failed to delete user'});
+        response.status(403);
+        response.send({msg: 'Unauthorized to delete user'});
     }
 }

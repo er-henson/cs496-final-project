@@ -62,6 +62,11 @@ exports.readByEmail = async function(userEmail)
     let user = await userModel.find( {email: userEmail}, {password:false} ).lean();
     return user[0];
 }
+exports.readById = async function(userId)
+{
+    let user = await userModel.find({_id: userId}).lean();
+    return user[0];
+}
 
 /*
 read users by their names

@@ -194,3 +194,20 @@ test('Update User Account', async function(){
         expect(res2.status).toHaveBeenCalledWith(202); // Verify that the response status is set to 202
 
 });
+describe('Delete User Account', function(){
+    it('Delete User Account', async function(){
+        let req = conIntercept.mockRequest();
+        let res = conIntercept.mockResponse();
+        let existingUser = {
+            _id: ObjectId.createFromHexString('5c4e7f1d148f900b0d416aea'),
+            username: 'phil',
+            email: 'phil@somewhere',
+            password: passUtil.hashPassword('phils pw'),
+            admin: 0
+        };
+        req.params._id = ObjectId.createFromHexString('5c4e7f1d148f900b0d416aea')
+        req.body = existingUser;
+        await userController.deleteUser(req, res);
+        expect(res.status).toHaveBeenCalledWith(204);
+    });
+});
