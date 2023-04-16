@@ -106,6 +106,31 @@ test('Read user information from email', async function()
     
     expect(returnedUser.username).toBe(newUser.username);
 });
+test('Read user by id', async function()
+{
+    //creating data to insert
+    let newUser = 
+    {   
+        _id: new ObjectId(),
+        username: "dave2",
+        email: "beakerman@jetset.net",
+        password: "i have no time for secrets!",
+        admin: 0
+    };
+    
+    // save user to the DB
+    await dao.create(newUser);
+    
+    // read user based on username
+    let returnedUser = await dao.readById(newUser._id);
+    console.log(returnedUser);
+    expect(returnedUser.email).toBe(newUser.email);
+    expect(returnedUser.username).toBe(newUser.username);
+});
+
+
+
+
 test('Update user by ID', async function() {
     // create a new user
     let userToCreate = {
