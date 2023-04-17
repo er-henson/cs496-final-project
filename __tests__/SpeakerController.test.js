@@ -120,7 +120,7 @@ describe('deleteSpeaker', () => {
     await SpeakerController.deleteSpeaker(request, response);
 
     expect(mockDao.deleteSpeakerByID).toHaveBeenCalledTimes(1);
-    expect(mockDao.deleteSpeakerByID).toHaveBeenCalledWith(request.params.id);
+    expect(mockDao.deleteSpeakerByID).toHaveBeenCalledWith(request.id);
     expect(response.status).toHaveBeenCalledWith(202);
     expect(response.send).toHaveBeenCalledWith(mockDeletedSpeaker);
   });
@@ -131,7 +131,7 @@ describe('deleteSpeaker', () => {
     await SpeakerController.deleteSpeaker(request, response);
 
     expect(mockDao.deleteSpeakerByID).toHaveBeenCalledTimes(1);
-    expect(mockDao.deleteSpeakerByID).toHaveBeenCalledWith(request.params.id);
+    expect(mockDao.deleteSpeakerByID).toHaveBeenCalledWith(request.id);
     expect(response.status).toHaveBeenCalledWith(404);
     expect(response.send).toHaveBeenCalledWith(null);
   });
