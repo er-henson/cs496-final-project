@@ -132,7 +132,7 @@ app.post('/savespeaker', speakerController.saveSpeaker);
 app.get('/allspeakers', speakerController.readAllSpeakers);
 app.post('/editspeaker', speakerController.updateSpeaker);
 app.get('/speaker/:id', speakerController.readSpeakerByID);
-
+app.delete('/speaker/:id', speakerController.deleteSpeaker);
 
 // NewsController operations
 app.post('/savenewspost', upload.array('newsImages', 10), newsController.saveNewsPost);

@@ -11,6 +11,15 @@ function Speakers() {
   const toEditPage = (speakerID) => {
     navigate('/EditSpeaker', { state: { id: speakerID } });
   };
+  const handleDelete = (speakerID) => {
+    axios.delete(`http://localhost:4000/speaker/${speakerID}`)
+    .then(() => {
+        console.log(speakerID);
+        const newspeakers = speakers.filter(speaker => speaker._id !== speakerID);
+        setSpeakers(newspeakers);
+    })
+    .catch()
+}
 
   useEffect(() => {
     axios.get('http://localhost:4000/allspeakers').then((response) => {
@@ -44,11 +53,12 @@ function Speakers() {
             {speakers.map((speaker) => (
               <li className="page_li" key={speaker._id}>
                 {/* link to the page to edit a particular speaker. links with the speaker ID so that page can use a GET request.*/}
-                {user && user.admin === 1 ?
+                {/* {user && user.admin === 1 ? */}
                     <button className="btn" style={{backgroundColor:'#FFA060'}} onClick={() => toEditPage(speaker._id)}>Edit</button>
+                    <button className="btn" style={{backgroundColor:'#FFA060'}} onClick={() => handleDelete(speaker._id)}>Delete</button>
                 :
                     <></>
-                }
+                {/* } */}
 
                 {/* layout for the speaker itself. */}
                 <p>
