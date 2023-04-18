@@ -26,9 +26,12 @@ beforeAll(function()
     newsController.setDAO(mockDAO);
 });
 
-test('Creating a news post with images', async function(){
+test('Creating a news post with images as admin', async function(){
     let req = conIntercept.mockRequest();
     let res = conIntercept.mockResponse();
+    
+    req.session.user = adminUser;
+    
     
     let img1name = 'internet_blues.jpg';
     let img1 = fs.readFileSync(path.join(__dirname, '../util/mocks/internet_blues.jpg'));
@@ -72,9 +75,11 @@ test('Creating a news post with images', async function(){
     
 });
 
-test('Creating a news post without images', async function(){
+test('Creating a news post without images as admin', async function(){
     let req = conIntercept.mockRequest();
     let res = conIntercept.mockResponse();
+    
+    req.session.user = adminUser;
     
     let testNewsPost = 
     {
@@ -97,6 +102,50 @@ test('Creating a news post without images', async function(){
     expect(res.send).toHaveBeenCalledWith(retNewsPost);
     
     
+});
+
+test('Creating a news post without images as non-admin', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.session.user = normalUser;
+    
+    let testNewsPost = 
+    {
+        date: Date.now(),
+        title: 'dooooom',
+        link: 'https://youtu.be/UQpKcrOzF1k',
+        description: 'i dunnno, something',
+    };
+    
+    req.body = testNewsPost;
+    
+    await newsController.saveNewsPost(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.send).toHaveBeenCalledWith(null);
+});
+
+test('Creating a news post without images while not logged in', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.session.user = null;
+    
+    let testNewsPost = 
+    {
+        date: Date.now(),
+        title: 'dooooom',
+        link: 'https://youtu.be/UQpKcrOzF1k',
+        description: 'i dunnno, something',
+    };
+    
+    req.body = testNewsPost;
+    
+    await newsController.saveNewsPost(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.send).toHaveBeenCalledWith(null);
 });
 
 test('Reading all news posts', async function(){
@@ -366,6 +415,8 @@ test('Finding a non-existing news post by its ID', async function() {
 test('Creating a news post with DAO error', async function(){
     let req = conIntercept.mockRequest();
     let res = conIntercept.mockResponse();
+    
+    req.session.user = adminUser;
     
     // Make the DAO return null to simulate an error
     mockDAO.create = jest.fn(() => null);

@@ -24,49 +24,57 @@ exports.readAllNews = async function(request, response)
 
 exports.saveNewsPost = async function(request, response)
 {
-    let requestImages = [];
-    // iterate through the images in the request
-    if(request.files)
+    if(request.session.user && request.session.user.admin === 1)
     {
-        //console.log(request.files);
-        for(let i = 0; i < request.files.length; i++)
+        let requestImages = [];
+        // iterate through the images in the request
+        if(request.files)
         {
-            requestImages.push({
-                name: request.files[i].originalname,
-                data: request.files[i].buffer,
-                contentType: 'image/jpeg'
-            });
+            //console.log(request.files);
+            for(let i = 0; i < request.files.length; i++)
+            {
+                requestImages.push({
+                    name: request.files[i].originalname,
+                    data: request.files[i].buffer,
+                    contentType: 'image/jpeg'
+                });
+            }
         }
-    }
-    
-    let newsPost = {
-        date: request.body.date,
-        title: request.body.title,
-        description: request.body.description
-    }
-    
-    // if a link is included in the submission, add it
-    if(request.body.link !== ''){
-        newsPost.link = request.body.link;
-    }
-    // if there are images in the submission, add them
-    if(requestImages.length > 0)
-    {
-        newsPost.images = requestImages;
-    }
-    
-    // save to DAO
-    let savedNewsPost = await dao.create(newsPost);
-    
-    // conditional response based on DAO return
-    if(savedNewsPost)
-    {
-        response.status(200);
-        response.send(savedNewsPost);
+        
+        let newsPost = {
+            date: request.body.date,
+            title: request.body.title,
+            description: request.body.description
+        }
+        
+        // if a link is included in the submission, add it
+        if(request.body.link !== ''){
+            newsPost.link = request.body.link;
+        }
+        // if there are images in the submission, add them
+        if(requestImages.length > 0)
+        {
+            newsPost.images = requestImages;
+        }
+        
+        // save to DAO
+        let savedNewsPost = await dao.create(newsPost);
+        
+        // conditional response based on DAO return
+        if(savedNewsPost)
+        {
+            response.status(200);
+            response.send(savedNewsPost);
+        }
+        else
+        {
+            response.status(500);
+            response.send(null);
+        }
     }
     else
     {
-        response.status(500);
+        response.status(401);
         response.send(null);
     }
 }
