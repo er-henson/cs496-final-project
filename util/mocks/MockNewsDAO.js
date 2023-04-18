@@ -67,7 +67,12 @@ exports.readAllNews = async function()
 
 exports.deleteNewsPost = async function(postID)
 {
-    return;
+    if(postID === -1){
+        throw new Error('500 Internal Server Error');;
+    }
+    else{
+        return;
+    }
 }
 
 exports.updateNewsItem = async function(newsPost)

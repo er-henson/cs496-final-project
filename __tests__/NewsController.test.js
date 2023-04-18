@@ -218,6 +218,20 @@ test('Deleting a news post while logged in as admin', async function(){
     
     expect(res.status).toHaveBeenCalledWith(204);
 });
+test('Deleting a news post while logged in as admin,but throw a 500', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.session.user = adminUser;
+    req.params.id = -1;
+    
+    await newsController.deleteNewsPost(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(500);
+});
+
+
+
 test('Deleting a news post while logged in as a normal user', async function(){
     let req = conIntercept.mockRequest();
     let res = conIntercept.mockResponse();
