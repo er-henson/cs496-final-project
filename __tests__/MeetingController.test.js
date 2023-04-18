@@ -1,272 +1,321 @@
-const MeetingController = require('../controller/MeetingController');
-//const MeetingDAO = require('../model/MeetingDAO');
+const meetingController = require('../controller/MeetingController');
+const conIntercept = require('../util/ControllerInterceptor');
+const mockDAO = require('../util/mocks/MockMeetingDAO');
 
-describe('MeetingController', () => {
-  let mockDao = null;
-  let request = null;
-  let response = null;
+const fs = require('fs');
+const path = require('path');
 
-  beforeEach(() => {
-    mockDao = {
-      create: jest.fn(),
-      readAll: jest.fn(),
-      getPastMeetings: jest.fn(),
-      getUpcomingMeetings: jest.fn(),
-      readByID: jest.fn(),
-      updateMeeting: jest.fn()
+
+let adminUser = {
+    username: 'billy',
+    email:'thekid@hotshot.net',
+    password:'something',
+    admin:1
+};
+
+let normalUser = {
+    username: 'jakob',
+    email:'dusker@hotspot.net',
+    password:'something else',
+    admin:0
+};
+
+beforeAll(function()
+{
+    meetingController.setDAO(mockDAO);
+});
+
+test('Creating a meeting post while signed in as admin (no images)', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.session.user = adminUser;
+    
+    let testMeeting = 
+    {
+        date: new Date("February 18, 2023 12:10:00"),
+        speaker: "mr. monkey",
+        topic: "why bananas are healthy for you",
+        location: "the top of a tree in a jungle somewhere",
+        content: "in this meeting, we discuss the health benefits of bananas, including their high potassium content."
     };
-    MeetingController.setDAO(mockDao);
-    request = {
-      body: {
-        date: '2023-03-01',
-        speaker: 'John Doe',
-        topic: 'Testing Jest',
-        location: 'Online',
-        content: 'This is a test meeting.',
-      },
+    
+    req.body = testMeeting;
+    req.file = null;
+    
+    await meetingController.saveMeeting(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.send).toHaveBeenCalledWith({
+        _id: 0,
+        date: new Date("February 18, 2023 12:10:00"),
+        speaker: "mr. monkey",
+        topic: "why bananas are healthy for you",
+        location: "the top of a tree in a jungle somewhere",
+        content: "in this meeting, we discuss the health benefits of bananas, including their high potassium content.",
+        feedback: {
+            avgRatings:0,
+            numRatings:0,
+            reviews:[]}
+    });
+    
+});
+
+test('Creating a meeting post while signed in as a normal user (no images)', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.session.user = normalUser;
+    
+    let testMeeting = 
+    {
+        date: new Date("February 18, 2023 12:10:00"),
+        speaker: "mr. monkey",
+        topic: "why bananas are healthy for you",
+        location: "the top of a tree in a jungle somewhere",
+        content: "in this meeting, we discuss the health benefits of bananas, including their high potassium content."
     };
-    response = {
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn(),
+    
+    req.body = testMeeting;
+    req.file = null;
+    
+    await meetingController.saveMeeting(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.send).toHaveBeenCalledWith(null);
+    
+});
+
+test('Creating a meeting post while not signed in', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    let testMeeting = 
+    {
+        date: new Date("February 18, 2023 12:10:00"),
+        speaker: "mr. monkey",
+        topic: "why bananas are healthy for you",
+        location: "the top of a tree in a jungle somewhere",
+        content: "in this meeting, we discuss the health benefits of bananas, including their high potassium content."
     };
-  });
-
-  describe('saveMeeting', () => {
-    it('should call dao.create with the new meeting object', async () => {
-      await MeetingController.saveMeeting(request, response);
-
-      expect(mockDao.create).toHaveBeenCalledTimes(1);
-      expect(mockDao.create).toHaveBeenCalledWith(request.body);
-    });
-
-    it('should send the saved meeting in the response', async () => {
-      const savedMeeting = { id: 1, ...request.body };
-      mockDao.create.mockReturnValue(savedMeeting);
-
-      await MeetingController.saveMeeting(request, response);
-
-      expect(response.status).toHaveBeenCalledWith(200);
-      expect(response.send).toHaveBeenCalledWith(savedMeeting);
-    });
-  });
-
-  describe('readAllMeetings', () => {
-    it('should call dao.readAll', async () => {
-      await MeetingController.readAllMeetings(request, response);
-      expect(mockDao.readAll).toHaveBeenCalledTimes(1);
-    });
-    describe('readPastMeetings', () => {
-      it('should call dao.getPastMeetings', async () => {
-        await MeetingController.readPastMeetings(request, response);
     
-        expect(mockDao.getPastMeetings).toHaveBeenCalledTimes(1);
-      });
+    req.body = testMeeting;
+    req.file = null;
     
-      it('should send all past meetings in the response', async () => {
-        const pastMeetings = [{ id: 1, ...request.body }];
-        mockDao.getPastMeetings.mockReturnValue(pastMeetings);
+    await meetingController.saveMeeting(req, res);
     
-        await MeetingController.readPastMeetings(request, response);
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.send).toHaveBeenCalledWith(null);
     
-        expect(response.status).toHaveBeenCalledWith(200);
-        expect(response.send).toHaveBeenCalledWith(pastMeetings);
-      });
+});
+
+test('Reading all meetings from the Database', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    
+    await meetingController.readAllMeetings(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(200);
+    
+});
+
+test('Reading past meetings from the Database', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    
+    await meetingController.readPastMeetings(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(200);
+    
+});
+
+test('Reading future meetings from the Database', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    
+    await meetingController.readFutureMeetings(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(200);
+    
+});
+
+test('Reading a valid meeting by its ID', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.params.id = 0;
+    
+    await meetingController.readMeetingByID(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(200);
+    
+});
+
+test('Reading an invalid meeting by ID', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.params.id = 4;
+    
+    await meetingController.readMeetingByID(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(404);
+});
+
+test('Updating a meeting as an admin', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.session.user = adminUser;
+    
+    let testMeeting = 
+    {
+        _id: 0,
+        date: new Date("February 18, 2023 12:10:00"),
+        speaker: "mr. monkey",
+        topic: "why bananas are healthy for you",
+        location: "the top of a tree in a jungle somewhere",
+        content: "in this meeting, we discuss the health benefits of bananas, including their high potassium content."
+    };
+    
+    req.body = testMeeting;
+    req.file = null;
+    
+    await meetingController.updateMeeting(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(202);
+    expect(res.send).toHaveBeenCalledWith({
+        _id: 0,
+        date: new Date("February 18, 2023 12:10:00"),
+        speaker: "mr. monkey",
+        topic: "why bananas are healthy for you",
+        location: "the top of a tree in a jungle somewhere",
+        content: "in this meeting, we discuss the health benefits of bananas, including their high potassium content."
     });
-    describe('readFutureMeetings', () => {
-      it('should call dao.', async () => {
-        await MeetingController.readFutureMeetings(request, response);
+});
+
+test('Updating a meeting as a non-admin', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
     
-        expect(mockDao.getUpcomingMeetings).toHaveBeenCalledTimes(1);
-      });
+    req.session.user = normalUser;
     
-      it('should send all past meetings in the response', async () => {
-        const upcomingMeetings = [{ id: 1, ...request.body }];
-        mockDao.getUpcomingMeetings.mockReturnValue(upcomingMeetings);
+    let testMeeting = 
+    {
+        _id: 0,
+        date: new Date("February 18, 2023 12:10:00"),
+        speaker: "mr. monkey",
+        topic: "why bananas are healthy for you",
+        location: "the top of a tree in a jungle somewhere",
+        content: "in this meeting, we discuss the health benefits of bananas, including their high potassium content."
+    };
     
-        await MeetingController.readFutureMeetings(request, response);
+    req.body = testMeeting;
+    req.file = null;
     
-        expect(response.status).toHaveBeenCalledWith(200);
-        expect(response.send).toHaveBeenCalledWith(upcomingMeetings);
-      });
-    });
-
-
-
-    it('should send all meetings in the response', async () => {
-      const allMeetings = [{ id: 1, ...request.body }];
-      mockDao.readAll.mockReturnValue(allMeetings);
-
-      await MeetingController.readAllMeetings(request, response);
-
-      expect(response.status).toHaveBeenCalledWith(200);
-      expect(response.send).toHaveBeenCalledWith(allMeetings);
-    });
-  });
-  describe('readAllMeetings', () => {
-    it('should return an array containing the added meeting', async () => {
-      // Save a new meeting
-      const newMeeting = {
-        date: '2023-03-01',
-        speaker: 'John Doe',
-        topic: 'Testing Jest',
-        location: 'Online',
-        content: 'This is a test meeting.',
-      };
-      mockDao.create.mockReturnValue(newMeeting);
-  
-      await MeetingController.saveMeeting(request, response);
-  
-      // Read all meetings
-      mockDao.readAll.mockReturnValue([newMeeting]);
-      await MeetingController.readAllMeetings(request, response);
-  
-      // Verify that the array contains the expected meeting
-      console.log(mockDao.readAll)
-      expect(mockDao.readAll).toHaveBeenCalledTimes(1);
-      expect(response.status).toHaveBeenCalledWith(200);
-      expect(response.send).toHaveBeenCalledWith([newMeeting]);
-    });
-  });
-  describe('readMeetingByID', () => {
-    it('should return the meeting with the specified ID', async () => {
-      const meetingID = '6418e67eb4803b6450bba029';
-      const mockMeeting = { id: meetingID, date: '2023-03-01', speaker: 'John Doe', topic: 'Testing Jest', location: 'Online', content: 'This is a test meeting.' };
-      mockDao.readByID.mockReturnValue(mockMeeting);
-      const mockRequest = { params: { id: meetingID } };
-      const mockResponse = { status: jest.fn().mockReturnThis(), send: jest.fn() };
-  
-      await MeetingController.readMeetingByID(mockRequest, mockResponse);
-  
-      expect(mockDao.readByID).toHaveBeenCalledWith(meetingID);
-      expect(mockResponse.status).toHaveBeenCalledWith(200);
-      expect(mockResponse.send).toHaveBeenCalledWith(mockMeeting);
-    });
-  
-    it('should return a 404 status code and null response when meeting is not found', async () => {
-      const meetingID = 'nonexistent-meeting-id';
-      mockDao.readByID.mockReturnValue(null);
-      const mockRequest = { params: { id: meetingID } };
-      const mockResponse = { status: jest.fn().mockReturnThis(), send: jest.fn() };
-  
-      await MeetingController.readMeetingByID(mockRequest, mockResponse);
-  
-      expect(mockDao.readByID).toHaveBeenCalledWith(meetingID);
-      expect(mockResponse.status).toHaveBeenCalledWith(404);
-      expect(mockResponse.send).toHaveBeenCalledWith(null);
-    });
-  });
-  describe('updateMeeting', () => {
-    it('should call dao.updateMeeting with the updated meeting object', async () => {
-      const updatedMeeting = {
-        _id: '12345',
-        date: '2023-04-15',
-        speaker: 'Jane Doe',
-        topic: 'Testing with Jest and Enzyme',
-        location: 'Online',
-        content: 'This is an updated test meeting.',
-      };
-      request.body = updatedMeeting;
-
-      await MeetingController.updateMeeting(request, response);
-
-      expect(mockDao.updateMeeting).toHaveBeenCalledTimes(1);
-      expect(mockDao.updateMeeting).toHaveBeenCalledWith(updatedMeeting);
-    });
-
-    it('should send the updated meeting in the response', async () => {
-      const updatedMeeting = {
-        _id: '12345',
-        date: '2023-04-15',
-        speaker: 'Jane Doe',
-        topic: 'Testing with Jest and Enzyme',
-        location: 'Online',
-        content: 'This is an updated test meeting.',
-      };
-      const returnedMeeting = { id: 1, ...updatedMeeting };
-      mockDao.updateMeeting.mockReturnValue(returnedMeeting);
-      request.body = updatedMeeting;
-
-      await MeetingController.updateMeeting(request, response);
-
-      expect(response.status).toHaveBeenCalledWith(202);
-      expect(response.send).toHaveBeenCalledWith(returnedMeeting);
-    });
-
-    it('should send a 404 status code if the meeting was not found', async () => {
-      mockDao.updateMeeting.mockReturnValue(null);
-
-      await MeetingController.updateMeeting(request, response);
-
-      expect(response.status).toHaveBeenCalledWith(404);
-      expect(response.send).toHaveBeenCalledWith(null);
-    });
-  });
-
-  describe('deleteMeeting', () => {
-    it('should call dao.deleteMeeting with the meeting ID', async () => {
-      const meetingID = '6418e67eb4803b6450bba029';
-      const mockDeleteMeeting = jest.fn();
-      mockDao.deleteMeeting = mockDeleteMeeting;
-  
-      await MeetingController.deleteMeeting({ params: { id: meetingID } }, response);
-  
-      expect(mockDeleteMeeting).toHaveBeenCalledTimes(1);
-      expect(mockDeleteMeeting).toHaveBeenCalledWith(meetingID);
-    });
-  
-    it('should send a 204 status code and a response body with id on successful deletion', async () => {
-      const meetingID = '6418e67eb4803b6450bba029';
-      const mockDeleteMeeting = jest.fn();
-      mockDao.deleteMeeting = mockDeleteMeeting;
-  
-      await MeetingController.deleteMeeting({ params: { id: meetingID } }, response);
-  
-      expect(response.status).toHaveBeenCalledWith(204);
-      expect(response.send).toHaveBeenCalledWith(`Meeting with id ${meetingID} has been deleted.`);
-    });
-  
-    it('should send a 500 status code and an error message on deletion failure', async () => {
-      const meetingID = '6418e67eb4803b6450bba029';
-      const errorMessage = 'Failed to delete meeting';
-      const mockDeleteMeeting = jest.fn().mockRejectedValue(new Error(errorMessage));
-      mockDao.deleteMeeting = mockDeleteMeeting;
-  
-      await MeetingController.deleteMeeting({ params: { id: meetingID } }, response);
-  
-      expect(response.status).toHaveBeenCalledWith(500);
-      expect(response.send).toHaveBeenCalledWith({ error: errorMessage });
-    });
-    it('should call dao.delete with the meeting id', async () => {
-        const meetingId = 1;
-        request.params = { id: meetingId };
-        
-        await MeetingController.deleteMeeting(request, response);
+    await meetingController.updateMeeting(req, res);
     
-        expect(mockDao.delete).toHaveBeenCalledTimes(1);
-        expect(mockDao.delete).toHaveBeenCalledWith(meetingId);
-      });
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.send).toHaveBeenCalledWith(null);
+});
+
+test('Updating a meeting while not signed in', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
     
-      it('should send a success message in the response', async () => {
-        const meetingId = 1;
-        request.params = { id: meetingId };
-        mockDao.delete.mockReturnValue(1);
+    let testMeeting = 
+    {
+        _id: 0,
+        date: new Date("February 18, 2023 12:10:00"),
+        speaker: "mr. monkey",
+        topic: "why bananas are healthy for you",
+        location: "the top of a tree in a jungle somewhere",
+        content: "in this meeting, we discuss the health benefits of bananas, including their high potassium content."
+    };
     
-        await MeetingController.deleteMeeting(request, response);
+    req.body = testMeeting;
+    req.file = null;
     
-        expect(response.status).toHaveBeenCalledWith(200);
-        expect(response.send).toHaveBeenCalledWith(`Meeting with id ${meetingId} has been deleted.`);
-      });
-      
-      it('should return a 404 error if the meeting is not found', async () => {
-        const meetingId = 1;
-        request.params = { id: meetingId };
-        mockDao.delete.mockReturnValue(0);
+    await meetingController.updateMeeting(req, res);
     
-        await MeetingController.deleteMeeting(request, response);
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.send).toHaveBeenCalledWith(null);
+});
+
+test('Deleting a valid meeting as an admin', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
     
-        expect(response.status).toHaveBeenCalledWith(404);
-        expect(response.send).toHaveBeenCalledWith(`Meeting with id ${meetingId} not found.`);
-      });
-    });
+    req.session.user = adminUser;
     
-  });
+    req.params.id = 0;
+    
+    await meetingController.deleteMeeting(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(204);
+    expect(res.send).toHaveBeenCalledWith(`Meeting with id 0 has been deleted.`);
+});
+
+test('Deleting an invalid meeting as an admin', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.session.user = adminUser;
+    
+    req.params.id = 20;
+    
+    await meetingController.deleteMeeting(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(500);
+});
+
+test('Deleting meeting as a non-admin', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.session.user = normalUser;
+    
+    req.params.id = 0;
+    
+    await meetingController.deleteMeeting(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(401);
+});
+
+test('Deleting meeting while not signed in', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.session.user = null;
+    
+    req.params.id = 0;
+    
+    await meetingController.deleteMeeting(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(401);
+});
+
+test('Searching for meetings with a good query', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.body.search = 'monkey';
+    
+    await meetingController.searchForMeetings(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(200);
+});
+
+test('Searching for meetings with a bad query', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.body.search = 'not monkey';
+    
+    await meetingController.searchForMeetings(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(404);
+});

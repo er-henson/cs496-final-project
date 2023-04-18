@@ -26,35 +26,42 @@ exports.saveMeeting = async function(request, response)
         check the MeetingDAO.js to see how mongoose works with this to store it
         on the database
     */
-    
-    let newMeeting = 
+    if(request.session.user && request.session.user.admin === 1)
     {
-        date: request.body.date,
-        speaker: request.body.speaker,
-        topic: request.body.topic,
-        location: request.body.location,
-        content: request.body.content,
-        // setting up empty fields for feedback
-        feedback: {
-            avgRatings:0,
-            numRatings:0,
-            reviews:[]}
-    };
-    
-    if(request.file)
-    {
-        let fileImage = {
-            data: request.file.buffer,
-            title:request.file.originalname,
-            contentType:'image/jpeg'
+        let newMeeting = 
+        {
+            date: request.body.date,
+            speaker: request.body.speaker,
+            topic: request.body.topic,
+            location: request.body.location,
+            content: request.body.content,
+            // setting up empty fields for feedback
+            feedback: {
+                avgRatings:0,
+                numRatings:0,
+                reviews:[]}
+        };
+        
+        if(request.file)
+        {
+            let fileImage = {
+                data: request.file.buffer,
+                title:request.file.originalname,
+                contentType:'image/jpeg'
+            }
+            newMeeting.img = fileImage;
         }
-        newMeeting.img = fileImage;
+        
+        let savedMeeting = await dao.create(newMeeting);
+        
+        response.status(200);
+        response.send(savedMeeting);
     }
-    
-    let savedMeeting = await dao.create(newMeeting);
-    
-    response.status(200);
-    response.send(savedMeeting);
+    else
+    {
+        response.status(401);
+        response.send(null);
+    }
 }
 
 /*
@@ -116,28 +123,36 @@ exports.readMeetingByID = async function(request, response)
 /*
 POST request
 update the information for a meeting
+Make sure only Admins can perform this action
 */
 exports.updateMeeting = async function(request, response)
 {
-    let updatedMeeting = {
-        _id: request.body._id,
-        date: request.body.date,
-        speaker: request.body.speaker,
-        topic: request.body.topic,
-        location: request.body.location,
-        content: request.body.content
-    };
-    
-    let returnedMeeting = await dao.updateMeeting(updatedMeeting);
-    
-    if(returnedMeeting !== null)
+    if(request.session.user && request.session.user.admin === 1)
     {
-        response.status(202);
-        response.send(returnedMeeting);
+        let updatedMeeting = {
+            _id: request.body._id,
+            date: request.body.date,
+            speaker: request.body.speaker,
+            topic: request.body.topic,
+            location: request.body.location,
+            content: request.body.content
+        };
+        
+        let returnedMeeting = await dao.updateMeeting(updatedMeeting);
+        
+        if(returnedMeeting !== null)
+        {
+            response.status(202);
+            response.send(returnedMeeting);
+        }
+        else
+        {
+            response.status(404);
+            response.send(null);
+        }
     }
-    else
-    {
-        response.status(404);
+    else{
+        response.status(401);
         response.send(null);
     }
 }
@@ -150,15 +165,22 @@ delete a meeting by its ID
 exports.deleteMeeting = async function(request, response) {
     const meetingID = request.params.id;
 
-    try {
-        // Find the meeting by its ID and delete it
-        await dao.deleteMeeting(meetingID);
-        
-        response.status(204);
-        response.send(`Meeting with id ${meetingID} has been deleted.`);
-    } catch (error) {
-        response.status(500);
-        response.send({ error: error.message });
+    if(request.session.user && request.session.user.admin === 1)
+    {
+        try {
+            // Find the meeting by its ID and delete it
+            await dao.deleteMeeting(meetingID);
+            
+            response.status(204);
+            response.send(`Meeting with id ${meetingID} has been deleted.`);
+        } catch (error) {
+            response.status(500);
+            response.send({ error: error.message });
+        }
+    }
+    else{
+        response.status(401);
+        response.send(null);
     }
 }
 
@@ -183,7 +205,7 @@ exports.searchForMeetings = async function(request, response){
         response.send(returnedMeetings);
     }
     else{
-        reseponse.status(404);
+        response.status(404);
         response.send(null);
     }
 }
