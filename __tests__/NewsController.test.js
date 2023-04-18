@@ -25,6 +25,64 @@ beforeAll(function()
 {
     newsController.setDAO(mockDAO);
 });
+test('Reading all news posts when there are none', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    await newsController.readAllNews(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(404);
+    // just copy/pasted the news post array from the mock
+    expect(res.send).toHaveBeenCalledWith(null);
+});
+test('Reading all news posts', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    // need to read these images in to test the ReadAll for the mock
+    let img1 = fs.readFileSync(path.join(__dirname, '../util/mocks/internet_blues.jpg'));
+
+    let img2 = fs.readFileSync(path.join(__dirname, '../util/mocks/how2screenshot.jpeg'));
+
+    let img3 = fs.readFileSync(path.join(__dirname, '../util/mocks/90s_pattern_2.jpg'));
+    
+    
+    
+    await newsController.readAllNews(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(200);
+    // just copy/pasted the news post array from the mock
+    expect(res.send).toHaveBeenCalledWith([
+    {
+        _id: 0,
+        date: "2021",
+        title: "old meme",
+        link: "https://youtu.be/gWo12TtN9Kk",
+        description: "THE ONE PIECE IS REEEAAALLL",
+        images: [
+            {
+                originalname:'internet_blues.jpg',
+                buffer:img1
+            },
+            {
+                originalname:'how2screenshot.jpeg',
+                buffer:img2
+            }]
+    },
+    {
+        _id: 1,
+        date: "1917",
+        title: "pretty good song",
+        link: "https://youtu.be/B7PwqzBgBls",
+        description: "i think this song is good",
+        images: [
+            {
+                originalname:'90s_pattern_2.jpg',
+                buffer:img3
+            }]
+    }
+    ]);
+});
 
 test('Creating a news post with images as admin', async function(){
     let req = conIntercept.mockRequest();
@@ -148,54 +206,6 @@ test('Creating a news post without images while not logged in', async function()
     expect(res.send).toHaveBeenCalledWith(null);
 });
 
-test('Reading all news posts', async function(){
-    let req = conIntercept.mockRequest();
-    let res = conIntercept.mockResponse();
-    
-    // need to read these images in to test the ReadAll for the mock
-    let img1 = fs.readFileSync(path.join(__dirname, '../util/mocks/internet_blues.jpg'));
-
-    let img2 = fs.readFileSync(path.join(__dirname, '../util/mocks/how2screenshot.jpeg'));
-
-    let img3 = fs.readFileSync(path.join(__dirname, '../util/mocks/90s_pattern_2.jpg'));
-    
-    
-    
-    await newsController.readAllNews(req, res);
-    
-    expect(res.status).toHaveBeenCalledWith(200);
-    // just copy/pasted the news post array from the mock
-    expect(res.send).toHaveBeenCalledWith([
-    {
-        _id: 0,
-        date: "2021",
-        title: "old meme",
-        link: "https://youtu.be/gWo12TtN9Kk",
-        description: "THE ONE PIECE IS REEEAAALLL",
-        images: [
-            {
-                originalname:'internet_blues.jpg',
-                buffer:img1
-            },
-            {
-                originalname:'how2screenshot.jpeg',
-                buffer:img2
-            }]
-    },
-    {
-        _id: 1,
-        date: "1917",
-        title: "pretty good song",
-        link: "https://youtu.be/B7PwqzBgBls",
-        description: "i think this song is good",
-        images: [
-            {
-                originalname:'90s_pattern_2.jpg',
-                buffer:img3
-            }]
-    }
-    ]);
-});
 
 test('Deleting a news post while logged in as admin', async function(){
     let req = conIntercept.mockRequest();

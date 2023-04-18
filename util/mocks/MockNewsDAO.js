@@ -45,6 +45,8 @@ let newsPosts = [
             }]
     }
 ]
+let called = 0;
+
 
 exports.create = async function(newsPost)
 {
@@ -54,7 +56,13 @@ exports.create = async function(newsPost)
 
 exports.readAllNews = async function()
 {
-    return newsPosts;
+    if(called == 0){
+        called+=1;
+        return null;
+    }
+    else{
+        return newsPosts;
+    }
 }
 
 exports.deleteNewsPost = async function(postID)
