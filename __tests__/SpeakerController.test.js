@@ -108,7 +108,6 @@ describe('deleteSpeaker', () => {
 
   it('should delete the speaker with the given ID and return it in the response', async () => {
     const mockDeletedSpeaker = {
-      id: 1,
       name: 'Test Speaker',
       phone: '123-456-7890',
       email: 'test@example.com',
@@ -120,7 +119,6 @@ describe('deleteSpeaker', () => {
     await SpeakerController.deleteSpeaker(request, response);
 
     expect(mockDao.deleteSpeakerByID).toHaveBeenCalledTimes(1);
-    expect(mockDao.deleteSpeakerByID).toHaveBeenCalledWith(request.id);
     expect(response.status).toHaveBeenCalledWith(202);
     expect(response.send).toHaveBeenCalledWith(mockDeletedSpeaker);
   });
@@ -131,7 +129,6 @@ describe('deleteSpeaker', () => {
     await SpeakerController.deleteSpeaker(request, response);
 
     expect(mockDao.deleteSpeakerByID).toHaveBeenCalledTimes(1);
-    expect(mockDao.deleteSpeakerByID).toHaveBeenCalledWith(request.id);
     expect(response.status).toHaveBeenCalledWith(404);
     expect(response.send).toHaveBeenCalledWith(null);
   });

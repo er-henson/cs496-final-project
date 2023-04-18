@@ -81,9 +81,13 @@ exports.updateNewsItem = async function(newsPost)
     {
         return newsPost;
     }
+    else if (newsPost._id === null){
+        throw new Error('500 Internal Server Error');
+    }
     else{
         return null;
     }
+
 }
 
 exports.readByID = async function(postID)

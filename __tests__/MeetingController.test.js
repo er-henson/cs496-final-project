@@ -60,6 +60,27 @@ test('Creating a meeting post while signed in as admin (no images)', async funct
     });
     
 });
+test('Creating a meeting post while signed in as admin (images)', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.session.user = adminUser;
+    
+    const file = {
+        buffer: Buffer.from('fakeimage', 'utf8'),
+        originalname: 'fakeimage.jpg'
+      };
+    
+    req.file = file;
+    
+    await meetingController.saveMeeting(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(200);
+    
+});
+
+
+
 
 test('Creating a meeting post while signed in as a normal user (no images)', async function(){
     let req = conIntercept.mockRequest();
@@ -196,6 +217,31 @@ test('Updating a meeting as an admin', async function(){
         content: "in this meeting, we discuss the health benefits of bananas, including their high potassium content."
     });
 });
+test('Updating a meeting as an admin,but throw error', async function(){
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.session.user = adminUser;
+    
+    let testMeeting = 
+    {
+        _id: -1,
+        date: new Date("February 18, 2023 12:10:00"),
+        speaker: "mr. monkey",
+        topic: "why bananas are healthy for you",
+        location: "the top of a tree in a jungle somewhere",
+        content: "in this meeting, we discuss the health benefits of bananas, including their high potassium content."
+    };
+    
+    req.body = testMeeting;
+    req.file = null;
+    
+    await meetingController.updateMeeting(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(404);
+});
+
+
 
 test('Updating a meeting as a non-admin', async function(){
     let req = conIntercept.mockRequest();

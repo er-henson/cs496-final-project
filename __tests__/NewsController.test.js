@@ -288,6 +288,40 @@ test('Updating an existing news post as an admin', async function() {
     expect(res.status).toHaveBeenCalledWith(204);
     expect(res.send).toHaveBeenCalledWith({msg: `news post has been updated`})
 });
+test('throw 500 error for Updating', async function() {
+    let req = conIntercept.mockRequest();
+    let res = conIntercept.mockResponse();
+    
+    req.session.user = adminUser;
+    
+    let img3 = fs.readFileSync(path.join(__dirname, '../util/mocks/90s_pattern_2.jpg'));
+    
+    // defining the form to test with
+    let images =[
+        {
+            originalname:'internet_blues.jpg',
+            buffer:img3
+        }];
+    
+    let testNewsPost = 
+    {
+        _id: null,
+        date: "1897",
+        title: "ancient meme",
+        link: "https://youtu.be/gWo12TtN9Kk",
+        description: "* muffled sounds of gorilla violence *",
+    };
+    
+    
+    req.files = images;
+    req.body = testNewsPost;
+    
+    await newsController.updateNewsPost(req, res);
+    
+    expect(res.status).toHaveBeenCalledWith(500);
+});
+
+
 
 test('Updating a non-existing news post as an admin', async function() {
     let req = conIntercept.mockRequest();

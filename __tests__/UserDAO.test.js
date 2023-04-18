@@ -163,7 +163,7 @@ describe('delete', () => {
     });
 
     it('should return null when deleting a non-existent user', async () => {
-      const deletedUser = await dao.delete(new ObjectId());
+      const deletedUser = await dao.delete({_id: new ObjectId()});
       expect(deletedUser).toBeNull();
     });
 });
