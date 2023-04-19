@@ -32,13 +32,20 @@ function NewsPage()
         navigate('/EditNewsPost', {state:{id:postID}});
     }
     
+    const toViewPage = (postID) => {
+        navigate('/ViewNewsPost', {state:{id:postID}});
+    }
+    
     const handleDelete = (postID) => {
-        axios.post(`http://localhost:4000/deletenews/${postID}`)
-        .then(() => {
-            const updatedNews = news.filter(newsPost => newsPost._id !== postID);
-            setNews(updatedNews);
-        })
-        .catch()
+        let confirmDelete = window.confirm("Are you sure you want to delete this news entry? This cannot be undone.");
+        if(confirmDelete){
+            axios.post(`http://localhost:4000/deletenews/${postID}`)
+            .then(() => {
+                const updatedNews = news.filter(newsPost => newsPost._id !== postID);
+                setNews(updatedNews);
+            })
+            .catch()
+        }
     }
 
     
@@ -54,54 +61,56 @@ function NewsPage()
             </div>
             
             <div className="d-flex justify-content-center align-items-center">
-    {/* statement that checks for news. If it's there, display it. If not, show that there is no news */}
-    {news && news.map && (news.length > 0) ? // the 'if' condition. if 'meetings' and 'meetings.map' are not null,...
-        <ul>
-        {news.map((newsPost) => (
-            <div>
-                <li className="page_li">
-                    <div className='row'>
-                        <div className='col-lg-11'>
-                            {/* buttons for editing or deleting a meeting.
-                                TODO - make it so these only appear to logged-in admins */}
-                            {user && user.admin === 1 ?
-                            <>
-                                <button className="btn" style={{backgroundColor:'#B59EC1'}} onClick={()=>{toEditPage(newsPost._id)}}> Edit </button>
-                            <span> </span>
-                                <button className="btn" style={{backgroundColor:'#B59EC1'}} onClick={()=>{handleDelete(newsPost._id)}}> Delete </button>
-                            </>
-                            :
-                            <></>
-                            }
-                            {/* layout for the news post itself. */}
-                            <p><span style={{fontWeight: 700}}>{newsPost.title} </span></p>
-                            <p>{newsPost.description}</p>
-                            
-                        </div>
-                        {/* check to see if there are images included with this news post. if so, display them. */
-                        newsPost.images && newsPost.images.map ?
-                            <div>
-                            {newsPost.images.map((image) => (
-                                <span>
-                                    <img alt='no image'src={`data:image/jpeg;base64,${image.data}`} style={{height:150}}/>
-                                </span>
-                            ))}
+            {/* statement that checks for news. If it's there, display it. If not, show that there is no news */}
+            {news && news.map && (news.length > 0) ? // the 'if' condition. if 'meetings' and 'meetings.map' are not null,...
+                <ul>
+                {news.map((newsPost) => (
+                    <div>
+                        <li className="page_li">
+                            <div className='row'>
+                                <div className='col-lg-11'>
+                                    {/* buttons for editing or deleting a meeting.
+                                        TODO - make it so these only appear to logged-in admins */}
+                                    {user && user.admin === 1 ?
+                                    <>
+                                        <button className="btn" style={{backgroundColor:'#84B9F9'}} onClick={()=>{toEditPage(newsPost._id)}}> Edit </button>
+                                    <span> </span>
+                                        <button className="btn" style={{backgroundColor:'#84B9F9'}} onClick={()=>{handleDelete(newsPost._id)}}> Delete </button>
+                                    <span> </span>
+                                    </>
+                                    :
+                                    <></>
+                                    }
+                                    <button className="btn" style={{backgroundColor:'#84B9F9'}} onClick={()=>{toViewPage(newsPost._id)}}> View </button>
+                                    {/* layout for the news post itself. */}
+                                    <p><span style={{fontWeight: 700}}>{newsPost.title} </span></p>
+                                    <p>{newsPost.description}</p>
+                                    
+                                </div>
+                                {/* check to see if there are images included with this news post. if so, display them. */
+                                newsPost.images && newsPost.images.map ?
+                                    <div>
+                                    {newsPost.images.map((image) => (
+                                        <span>
+                                            <img alt='no image'src={`data:image/jpeg;base64,${image.data}`} style={{height:150}}/>
+                                        </span>
+                                    ))}
+                                    </div>
+                                :
+                                    <></>
+                                }
                             </div>
-                        :
-                            <></>
-                        }
+                        </li>
                     </div>
-                </li>
+                ))}
+                </ul>
+                :
+                <h1>No News Found</h1>
+            }
             </div>
-        ))}
-        </ul>
-        :
-        <h1>No News Found</h1>
-    }
-    </div>
     
         </div>
     </div>
 );
 }
-export default NewsPage
+export default NewsPage;

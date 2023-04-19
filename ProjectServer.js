@@ -124,7 +124,8 @@ app.delete('/meeting/:id', meetingController.deleteMeeting);
 app.get('/allmeetings', meetingController.readAllMeetings);
 app.get('/upcomingmeetings', meetingController.readFutureMeetings);
 app.get('/meeting/:id', meetingController.readMeetingByID);
-app.get('/pastmeetings',meetingController.readPastMeetings)
+app.get('/pastmeetings',meetingController.readPastMeetings);
+app.post('/searchmeetings', meetingController.searchForMeetings);
 
 
 // SpeakingController operations
@@ -139,7 +140,7 @@ app.post('/savenewspost', upload.array('newsImages', 10), newsController.saveNew
 app.get('/getnews', newsController.readAllNews);
 app.post('/updatenewspost', upload.array('newsImages', 10), newsController.updateNewsPost);
 app.post('/deletemeeting/:id', newsController.deleteNewsPost);
-//app.get('/news/:id', newsController.findPostByID)
+app.get('/news/:id', newsController.findNewsPostByID)
 
 
 const server = app.listen(port, hostname, 

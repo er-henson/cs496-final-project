@@ -38,7 +38,7 @@ function CreateNewsPost() {
         console.log(newPost);
         
         // send the meeting to the backend
-        axios.post('http://localhost:4000/savenewspost', newPost, {withValidation: true})
+        axios.post('http://localhost:4000/savenewspost', newPost, {withValidation: true, withCredentials: true})
         .then((response) =>
         {
             console.log(response.data);

@@ -13,15 +13,19 @@ function UpcomingMeetings()
     }
     
     const handleDelete = (meetingID) => {
-      axios.delete(`http://localhost:4000/meeting/${meetingID}`)
+      let confirmDelete = window.confirm("Are you sure you want to delete this meeting? This cannot be undone.");
+      if(confirmDelete)
+      {
+        axios.delete(`http://localhost:4000/meeting/${meetingID}`)
         .then(() => {
-          // Remove the deleted meeting from the meetings array in the state
-          const updatedMeetings = meetings.filter(meeting => meeting._id !== meetingID);
-          setMeetings(updatedMeetings);
+            // Remove the deleted meeting from the meetings array in the state
+            const updatedMeetings = meetings.filter(meeting => meeting._id !== meetingID);
+            setMeetings(updatedMeetings);
         })
-        .catch((error) => {
-          console.log(error);
+            .catch((error) => {
+            console.log(error);
         });
+      }
     };
     
     useEffect(() => {
@@ -33,7 +37,6 @@ function UpcomingMeetings()
         
         axios.get('http://localhost:4000/getlogged', {withCredentials: true})
         .then((response) => {
-            console.log(response.data);
             setUser(response.data);
         })
         .catch((error) => {
@@ -89,7 +92,7 @@ function UpcomingMeetings()
                                 is the buffer data from the DAO. the incantation `data:image/jpeg;base64,${x}` is how
                                 buffer data is actually interpreted and displayed on the page. i set the image size 
                                 to be really small so that it doesn't take up a huge portion of the page.*/}
-                            <img alt='no image'src={`data:image/jpeg;base64,${meeting.img.data}`} style={{height:150}}/>
+                            <img alt='no image' src={`data:image/jpeg;base64,${meeting.img.data}`} style={{height:150}}/>
                         </div>
                         :
                         <></>
@@ -100,7 +103,7 @@ function UpcomingMeetings()
         ))}
         </ul>
         :
-        <h1>No meetings found</h1>
+        <h1>No Meetings Found</h1>
     }
     </div>
     

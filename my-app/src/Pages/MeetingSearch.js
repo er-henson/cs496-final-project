@@ -8,9 +8,11 @@ function MeetingSearch(){
     
     const handleSearch = (e) => {
         e.preventDefault();
+        
         axios.post('http://localhost:4000/searchmeetings', {search: query})
         .then((response)=>{
             let currMeetings = response.data;
+            console.log(response.data);
             if(currMeetings)
             {
                 setMeetings(response.data);
@@ -59,30 +61,30 @@ function MeetingSearch(){
             {meetings && meetings.map && (meetings.length > 0) ?
                 <ul>
                 {meetings.map((meeting) => (
-                    <div>
-                        <li className='page_li'>
+                    
+                    <li className='page_li'>
                         <div className='row'>
-                        <div className='col-lg-11'>
+                            <div className='col-lg-11'>
 
-                            {/* layout for the meeting itself. */}
-                            <p><span style={{fontWeight: 700}}>Date:</span> {new Date(Date.parse(meeting.date)).toDateString()}</p>
-                            <p><span style={{fontWeight: 700}}>Time:</span> {new Date(Date.parse(meeting.date)).toLocaleTimeString()}</p>
-                            <p><span style={{fontWeight: 700}}>Topic:</span> {meeting.topic}</p>
-                            <p><span style={{fontWeight: 700}}>Speaker:</span> {meeting.speaker}</p>
-                            <p style={{fontWeight: 700}}>Description:</p>
-                            <p>{meeting.content}</p>
-                        </div>
-                        {/* check to see if there is an image included with this meeting. if so, display it. */
-                            meeting.img ?
-                            <div className='col-lg-2'>
-                                <img alt='no image'src={`data:image/jpeg;base64,${meeting.img.data}`} style={{height:150}}/>
+                                {/* layout for the meeting itself. */}
+                                <p><span style={{fontWeight: 700}}>Date:</span> {new Date(Date.parse(meeting.date)).toDateString()}</p>
+                                <p><span style={{fontWeight: 700}}>Time:</span> {new Date(Date.parse(meeting.date)).toLocaleTimeString()}</p>
+                                <p><span style={{fontWeight: 700}}>Topic:</span> {meeting.topic}</p>
+                                <p><span style={{fontWeight: 700}}>Speaker:</span> {meeting.speaker}</p>
+                                <p style={{fontWeight: 700}}>Description:</p>
+                                <p>{meeting.content}</p>
                             </div>
-                            :
-                            <></>
-                        }
+                            {/* check to see if there is an image included with this meeting. if so, display it. */
+                                meeting.img && meeting.img.data ?
+                                <div className='col-lg-1'>
+                                    <img alt='no image' src={`data:image/jpeg;base64,${meeting.img.data}`} style={{height:150}}/>
+                                </div>
+                                :
+                                <></>
+                            }
                         </div>
-                        </li>
-                    </div>
+                    </li>
+                    
                 ))}
                 </ul>
             :

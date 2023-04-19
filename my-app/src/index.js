@@ -19,6 +19,10 @@ import PastMeetings from './Pages/PastMeetings'
 import NewsPage from './Pages/NewsPage'
 import Speakers from './Pages/Speakers'
 import CreationPage from './Pages/CreationPage'
+import ViewNewsPost from './Pages/ViewNewsPost'
+
+import MeetingSearch from './Pages/MeetingSearch'
+
 import MultiImageUpload from './Components/MultiImageUpload'
 import './site_style.css';
 import Jumbotron from './MainPage/Jumbotron';
@@ -51,6 +55,8 @@ root.render(
       <Route exact path="/EditMeeting" element={<EditMeeting/>}/>
       <Route exact path="/EditSpeaker" element={<EditSpeaker/>}/>
       <Route exact path="/CreationPage" element={<CreationPage/>}/>
+      <Route exact path="/MeetingSearch" element={<MeetingSearch/>}/>
+      <Route exact path="/ViewNewsPost" element={<ViewNewsPost/>}/>
       <Route exact path="/MultiImageUpload" element={<MultiImageUpload imageChange={console.log}/>}/>
     </Routes>
   </BrowserRouter>

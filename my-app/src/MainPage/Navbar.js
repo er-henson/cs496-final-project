@@ -58,6 +58,9 @@ function Navbar()
                 <li className="nav-item">
                     <NavLink to="/NewsPage" className="fancy_link">News & Events</NavLink>
                 </li>
+                <li className="nav-item">
+                    <NavLink to="/MeetingSearch" className="fancy_link">Search Meetings</NavLink>
+                </li>
                 
                 
                                 {/*check if the user is logged in. if they are, then change these buttons to 'logout'*/}

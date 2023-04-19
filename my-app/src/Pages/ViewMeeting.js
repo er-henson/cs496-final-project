@@ -10,7 +10,6 @@ function ViewMeeting(){
     
     const loc = useLocation();
     const navigate = useNavigate();
-    
     let meetingID = loc.state.id;
     
     /*
@@ -56,16 +55,12 @@ function ViewMeeting(){
                                 {/* check to see if there is an image included with this meeting. if so, display it. */
                                 meeting.img ?
                                 <div className='col-lg-2'>
-                                    {/* display for the image on the frontend. the main piece is the `meeting.img.data,` which
-                                        is the buffer data from the DAO. the incantation `data:image/jpeg;base64,${x}` is how
-                                        buffer data is actually interpreted and displayed on the page. i set the image size 
-                                        to be really small so that it doesn't take up a huge portion of the page.*/}
-                                    <img alt='no image'src={`data:image/jpeg;base64,${meeting.img.data}`} style={{height:400}}/>
+                                    <img alt='no image' src={`data:image/jpeg;base64,${meeting.img.data}`} style={{height:400}}/>
                                     
                                     </div>
                                     :
                                     <></>
-                                    }
+                                }
                                 </div>
                             </div>
                             

@@ -24,7 +24,13 @@ function EditMeeting()
         
         axios.get("http://localhost:4000/meeting/" + meetingID)
         .then((response) => {
-            setDate(response.data.date);
+            let meetingDT = new Date(response.data.date);
+            //const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            
+            let meetingTime = meetingDT.toTimeString();
+            let meetingDate = meetingDT.toDateString();
+            setDate(meetingDate);
+            setTime(meetingTime);
             setSpeaker(response.data.speaker);
             setTopic(response.data.topic);
             setLocation(response.data.location);
@@ -43,10 +49,12 @@ function EditMeeting()
     const handleSubmit = async (e) => {
         e.preventDefault();
         
+        let combinedDateTime = new Date(Date.parse(date + " " + time))
+        
         // send the meeting to the backend
         axios.post('http://localhost:4000/updatemeeting', 
             {_id: meetingID,
-             date: date,
+             date: combinedDateTime,
              speaker: speaker,
              topic: topic,
              location: location,
@@ -83,6 +91,11 @@ function EditMeeting()
           <div className="form-group">
             <label htmlFor="meetingDate">Date</label>
             <input type="date" className="form-control" id="meetingDate" required value={date} onChange={(e) => setDate(e.target.value)} />
+          </div>
+          {/*field for setting the time*/}
+          <div className="form-group">
+            <label htmlFor="meetingTime">Time</label>
+            <input type="time" className="form-control" id="meetingTime" required value={time} onChange={(e) => setTime(e.target.value)} />
           </div>
           {/*field for setting the speaker*/}
           <div className="form-group">
