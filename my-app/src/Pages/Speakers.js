@@ -80,7 +80,7 @@ function Speakers() {
         ))}
       </ul>
     ) : (
-      <h1>No speakers found</h1>
+      <h1 className='text-center'>No speakers found</h1>
     )}
     </div>
   </div>

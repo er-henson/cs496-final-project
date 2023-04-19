@@ -5,24 +5,35 @@ function CreationPage(){
     
     
     return (
-        <div>
-            <h1>huh!?</h1>
+        <div className='d-flex justify-content-center'>
+            <div className='col-lg-4'>
+                <div className='row'>
+                <h1 className='text-center'>Options</h1>
+                </div>
             
-            <NavLink to="/CreateMeeting" className="btn" style={{backgroundColor:'#9975B2'}}>
-                Create New Meeting
-            </NavLink>
+                <div className='row'>
+                    <NavLink to="/CreateMeeting" className="btn" style={{backgroundColor:'#9975B2'}}>
+                        Create New Meeting
+                    </NavLink>
+                </div>
+                
+                <br/>
+                
+                <div className='row'>
+                    <NavLink to="/CreateSpeaker" className="btn" style={{backgroundColor:'#FFA060'}}>
+                        Add Guest Speaker
+                    </NavLink>
+                </div>
+                
+                <br/>
+                
+                <div className='row'>
+                    <NavLink to="/CreateNewsPost" className="btn" style={{backgroundColor:'#84B9F9'}}>
+                        Create News Post
+                    </NavLink>
+                </div>
+            </div>
             
-            <br/>
-            
-            <NavLink to="/CreateSpeaker" className="btn" style={{backgroundColor:'#FFA060'}}>
-                Add Guest Speaker
-            </NavLink>
-            
-            <br/>
-            
-            <NavLink to="/CreateNewsPost" className="btn" style={{backgroundColor:'#84B9F9'}}>
-                Create News Post
-            </NavLink>
         </div>
     );
 }

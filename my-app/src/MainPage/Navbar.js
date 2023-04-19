@@ -29,6 +29,7 @@ function Navbar()
         axios.get('http://localhost:4000/logout', {withCredentials: true})
         .then((response) => {
             setUser(null);
+            window.location.reload(false);
         })
     }
     

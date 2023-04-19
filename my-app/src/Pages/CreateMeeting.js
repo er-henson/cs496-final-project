@@ -61,7 +61,7 @@ function CreateMeeting() {
     
     
     // send the meeting to the backend
-    axios.post('http://localhost:4000/savemeeting', newMeeting, {withValidation: true})
+    axios.post('http://localhost:4000/savemeeting', newMeeting, {withValidation: true, withCredentials: true})
     .then((response) =>
     {
         console.log(response.data);

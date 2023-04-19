@@ -6,6 +6,7 @@ function EditMeeting()
 
 {
     const [date, setDate] = useState('');
+    const [time, setTime] = useState('');
     const [speaker, setSpeaker] = useState('');
     const [topic, setTopic] = useState('');
     const [location, setLocation] = useState('');
@@ -50,7 +51,7 @@ function EditMeeting()
              topic: topic,
              location: location,
              content: content
-            })
+            }, {withCredentials: true})
         .then((response) =>
         {
             console.log(response.data);

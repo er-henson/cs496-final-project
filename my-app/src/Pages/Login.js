@@ -44,6 +44,7 @@ function Login()
             
             let path = '/Home';
             navigate(path);
+            window.location.reload(false);
         })
         .catch((error) =>
         {

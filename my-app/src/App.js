@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import UpcomingMeetings from './Pages/UpcomingMeetings'
-import NewsSection from './MainPage/NewsSection'
+import NewsPage from './Pages/NewsPage'
 import Footer from './Components/Footer'
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
       <div className="container" >
         <div className="row">
             <div className="col-lg-6">
-                <NewsSection/>
+                <NewsPage/>
             </div>
             <div className="col-lg-6">
                 <UpcomingMeetings/>
