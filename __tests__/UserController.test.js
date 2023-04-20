@@ -2,7 +2,7 @@ const userController = require('../controller/UserController');
 const conIntercept = require('../util/ControllerInterceptor');
 const mockDao = require('../util/mocks/MockUserDao');
 const passUtil = require('../util/PasswordUtil');
-const { ObjectId } = require('mongodb');
+// const { ObjectId } = require('mongodb');
 
 
 
@@ -199,13 +199,14 @@ describe('Delete User Account', function(){
         let req = conIntercept.mockRequest();
         let res = conIntercept.mockResponse();
         let existingUser = {
-            _id: ObjectId.createFromHexString('5c4e7f1d148f900b0d416aea'),
+            _id: '5c4e7f1d148f900b0d416aea',
             username: 'phil',
             email: 'phil@somewhere',
             password: passUtil.hashPassword('phils pw'),
             admin: 0
         };
-        req.params._id = ObjectId.createFromHexString('5c4e7f1d148f900b0d416aea')
+        req.session.user = adminUser;
+        req.params._id = '5c4e7f1d148f900b0d416aea';
         req.body = existingUser;
         await userController.deleteUser(req, res);
         expect(res.status).toHaveBeenCalledWith(204);

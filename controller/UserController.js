@@ -77,15 +77,7 @@ exports.login = async function(request, response)
 get the logged-in user
 */
 exports.getLoggedUser = async function(request, response)
-{
-    /*
-    console.log('in the getLoggedUser function - request:');
-    console.log('SessionID:\n---\n');
-    console.log(request.sessionID);
-    console.log('Session:\n---\n');
-    console.log(request.session);
-    */
-    
+{    
     if(request.session.user)
     {
         response.status(200);
@@ -155,7 +147,7 @@ delete a user
 exports.deleteUser = async function(request, response) {
     let requesterId = request.params._id;
     let targetId = request.body._id;
-    let requesterIsAdmin = request.body.admin;
+    let requesterIsAdmin = request.body.admin ;
     
     if (requesterIsAdmin || requesterId.equals(targetId)) {
         let user = await dao.readById(targetId);

@@ -26,7 +26,7 @@ exports.login = async function(email, pw) {
     };
     
     if(email === existingUser.email && pw === existingUser.password) {
-        //return existingUser;
+        return existingUser;
     } else {
         return null;
     }
@@ -49,7 +49,7 @@ exports.update = async function(id,updatedUser) {
 };
 exports.readById = async function(id) {
     let existingUser = {
-        _id: ObjectId.createFromHexString('5c4e7f1d148f900b0d416aea'),
+        _id: '5c4e7f1d148f900b0d416aea',
         username: 'phil',
         email: 'phil@somewhere',
         password: passUtil.hashPassword('phils pw'),
@@ -70,15 +70,15 @@ exports.delete = async function(id) {
 
 
     let existingUser = {
-        _id: ObjectId.createFromHexString('5c4e7f1d148f900b0d416aea'),
+        _id: '5c4e7f1d148f900b0d416aea',
         username: 'phil',
         email: 'phil@somewhere',
         password: passUtil.hashPassword('phils pw'),
         admin: 0
     };
-    if (id.equals(existingUser._id) || admin === 1) {
+    if (id.equals(existingUser._id)) {
         return 'deleted';
-    } else if(admin === 0 && id !== existingUser._id){
+    } else{
         return 'unauthorized, not deleted';
 
     }
