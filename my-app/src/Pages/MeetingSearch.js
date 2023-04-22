@@ -6,6 +6,12 @@ function MeetingSearch(){
     const [meetings,setMeetings] = React.useState();
     const [query, setQuery] = React.useState('');
     
+    const navigate = useNavigate();
+    
+    const toViewPage = (postID) => {
+        navigate('/ViewMeeting', {state:{id:postID}});
+    }
+    
     const handleSearch = (e) => {
         e.preventDefault();
         
@@ -31,7 +37,7 @@ function MeetingSearch(){
     return(
         <div className="d-flex justify-content-center align-items-center">
         <div className='col-12'>
-            <div style={{ backgroundColor: '#B59EC1' }}>
+            <div style={{ backgroundColor: '#0F527F' }}>
               <header className="mt-2 p-4 text-white text-center rounded">
                 <h1 style={{ fontWeight: 700, color: '#ffffff' }}> Search Meetings </h1>
               </header>
@@ -56,7 +62,7 @@ function MeetingSearch(){
                 </div>
             </div>
             
-            <div className='row justify-content-center align-items-center'>
+            <div className='d-flex justify-content-center align-items-center'>
             <div className='col-12 col-lg-8'>
             {meetings && meetings.map && (meetings.length > 0) ?
                 <ul>
@@ -64,7 +70,8 @@ function MeetingSearch(){
                     
                     <li className='page_li'>
                         <div className='row'>
-                            <div className='col-lg-11'>
+                            <div className='col-lg-10'>
+                                <button className="btn" style={{backgroundColor:'#0F527F'}} onClick={()=>{toViewPage(meeting._id)}}> View </button>
 
                                 {/* layout for the meeting itself. */}
                                 <p><span style={{fontWeight: 700}}>Date:</span> {new Date(Date.parse(meeting.date)).toDateString()}</p>
@@ -76,8 +83,8 @@ function MeetingSearch(){
                             </div>
                             {/* check to see if there is an image included with this meeting. if so, display it. */
                                 meeting.img && meeting.img.data ?
-                                <div className='col-lg-1'>
-                                    <img alt='no image' src={`data:image/jpeg;base64,${meeting.img.data}`} style={{height:150}}/>
+                                <div className='col-lg-2'>
+                                    <img alt='no image' src={`data:image/jpeg;base64,${meeting.img.data}`} style={{width:150}}/>
                                 </div>
                                 :
                                 <></>
@@ -88,8 +95,17 @@ function MeetingSearch(){
                 ))}
                 </ul>
             :
-                <h1>No Meetings</h1>
-                
+                <>
+                {meetings && meetings.map && (meetings.length === 0) ?
+                    <div className='d-flex justify-content-center align-items-center'>
+                    <h1>No Meetings</h1>
+                    </div>
+                :
+                    <div className='d-flex justify-content-center align-items-center'>
+                    <h1>Search for Meetings</h1>
+                    </div>
+                }
+                </>
             }
             </div>
             </div>

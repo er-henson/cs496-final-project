@@ -171,7 +171,7 @@ exports.searchMeetings = async function(searchQuery)
             $diacriticSensitive: false
             }
         }
-    );
+    ).lean();
     return searchedMeetings;
 }
 

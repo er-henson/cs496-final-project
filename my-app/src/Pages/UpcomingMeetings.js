@@ -12,6 +12,10 @@ function UpcomingMeetings()
         navigate('/EditMeeting', {state:{id:meetingID}});
     }
     
+    const toViewPage = (postID) => {
+        navigate('/ViewMeeting', {state:{id:postID}});
+    }
+    
     const handleDelete = (meetingID) => {
       let confirmDelete = window.confirm("Are you sure you want to delete this meeting? This cannot be undone.");
       if(confirmDelete)
@@ -65,7 +69,7 @@ function UpcomingMeetings()
             <div>
                 <li className="page_li">
                     <div className='row'>
-                        <div className='col-lg-11'>
+                        <div className='col-lg-10'>
                             {/* buttons for editing or deleting a meeting.
                                 TODO - make it so these only appear to logged-in admins */}
                             {user && user.admin === 1 ?
@@ -73,26 +77,33 @@ function UpcomingMeetings()
                                 <button className="btn" style={{backgroundColor:'#B59EC1'}} onClick={()=>{toEditPage(meeting._id)}}> Edit </button>
                             <span> </span>
                                 <button className="btn" style={{backgroundColor:'#B59EC1'}} onClick={()=>{handleDelete(meeting._id)}}> Delete </button>
+                            <span> </span>
                             </>
                             :
                             <></>
                             }
+                            <button className="btn" style={{backgroundColor:'#B59EC1'}} onClick={()=>{toViewPage(meeting._id)}}> View </button>
                             {/* layout for the meeting itself. */}
                             <p><span style={{fontWeight: 700}}>Date:</span> {new Date(Date.parse(meeting.date)).toDateString()}</p>
                             <p><span style={{fontWeight: 700}}>Time:</span> {new Date(Date.parse(meeting.date)).toLocaleTimeString()}</p>
                             <p><span style={{fontWeight: 700}}>Topic:</span> {meeting.topic}</p>
                             <p><span style={{fontWeight: 700}}>Speaker:</span> {meeting.speaker}</p>
                             <p style={{fontWeight: 700}}>Description:</p>
-                            <p>{meeting.content}</p>
+                            <p className='d-inline-block text-truncate'
+                                style={{overflow:'hidden',
+                                        maxWidth: 500,
+                                        textOverflow:'ellipsis'}}>
+                            {meeting.content}
+                            </p>
                         </div>
                         {/* check to see if there is an image included with this meeting. if so, display it. */
                         meeting.img ?
-                        <div className='col-lg-1'>
+                        <div className='col-lg-2'>
                             {/* display for the image on the frontend. the main piece is the `meeting.img.data,` which
                                 is the buffer data from the DAO. the incantation `data:image/jpeg;base64,${x}` is how
                                 buffer data is actually interpreted and displayed on the page. i set the image size 
                                 to be really small so that it doesn't take up a huge portion of the page.*/}
-                            <img alt='no image' src={`data:image/jpeg;base64,${meeting.img.data}`} style={{height:150}}/>
+                            <img alt='no image' src={`data:image/jpeg;base64,${meeting.img.data}`} style={{width:150}}/>
                         </div>
                         :
                         <></>

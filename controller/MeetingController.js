@@ -196,13 +196,11 @@ performs a search query on data through text search of the indexed fields
 */
 exports.searchForMeetings = async function(request, response){
     let meetingSearch = request.body.search;
-    console.log(meetingSearch);
     
     let returnedMeetings = await dao.searchMeetings(meetingSearch);
     
     if(returnedMeetings && returnedMeetings.length > 0)
     {
-        console.log(returnedMeetings);
         response.status(200);
         response.send(returnedMeetings);
     }

@@ -50,6 +50,7 @@ function Login()
         {
             console.log("error trying to log in");
             console.log(error);
+            window.alert('Incorrect Login Credentials.');
         });
     }
     

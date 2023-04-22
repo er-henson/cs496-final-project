@@ -20,6 +20,7 @@ import NewsPage from './Pages/NewsPage'
 import Speakers from './Pages/Speakers'
 import CreationPage from './Pages/CreationPage'
 import ViewNewsPost from './Pages/ViewNewsPost'
+import ViewMeeting from './Pages/ViewMeeting'
 
 import MeetingSearch from './Pages/MeetingSearch'
 
@@ -57,6 +58,7 @@ root.render(
       <Route exact path="/CreationPage" element={<CreationPage/>}/>
       <Route exact path="/MeetingSearch" element={<MeetingSearch/>}/>
       <Route exact path="/ViewNewsPost" element={<ViewNewsPost/>}/>
+      <Route exact path="/ViewMeeting" element={<ViewMeeting/>}/>
       <Route exact path="/MultiImageUpload" element={<MultiImageUpload imageChange={console.log}/>}/>
     </Routes>
   </BrowserRouter>

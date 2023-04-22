@@ -46,7 +46,7 @@ function Speakers() {
           </header>
         </div>
         
-        <div className="col-12 col-lg-8">
+        <div className="d-flex justify-content-center align-items-center">
         {/* statement that checks for speakers. If they're there, display them. If not, show that there are no speakers */}
         {speakers && speakers.length > 0 ? (
           <ul>

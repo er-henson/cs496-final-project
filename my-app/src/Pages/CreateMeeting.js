@@ -66,7 +66,7 @@ function CreateMeeting() {
     {
         console.log(response.data);
         // redirect to the page with upcoming meetings
-        let path = '/UpcomingMeetings';
+        let path = '/Home';
         navigate(path);
     })
     .catch((error) =>
